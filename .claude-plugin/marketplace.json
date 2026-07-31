@@ -1,0 +1,15 @@
+{
+  "name": "dev-expert",
+  "version": "1.0.0",
+  "owner": {
+    "name": "liusiyang",
+    "url": "https://github.com/liusiyangiOS"
+  },
+  "plugins": [
+    {
+      "name": "dev-expert-plugin",
+      "source": "./",
+      "description": "开发专家团：8 个研发专家 agent + 3 条开发工作流，覆盖调研、计划、开发、调试、测试、安全审计、代码审查与交付总控"
+    }
+  ]
+}
