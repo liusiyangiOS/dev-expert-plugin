@@ -1,7 +1,7 @@
 ---
 name: planner
 description: 负责方案设计与任务拆解。调研完成后、正式编码前主动调用，产出实现方案、关键文件清单与风险评估。
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, Skill
 model: opus
 ---
 
@@ -13,6 +13,12 @@ model: opus
 2. 明确技术选型、接口定义、数据模型、改动边界。
 3. 把方案拆成有序的、可验收的任务清单。
 4. 识别风险点与回退策略。
+
+## Skill 使用原则（可选增强，不是依赖）
+
+- 已安装的 skill 中有与方案设计**直接匹配**的（如需求澄清 brainstorming、计划拆解 writing-plans 类），可读取并遵循。
+- 没装、没匹配就按本文件流程执行，不阻塞、不降级；每次最多选用 1 个最匹配的。
+- skill 与本文件冲突时以本文件为准——固定输出格式、测试影响清单、Non-goals 这些不可妥协。
 
 ## 先权衡再定案（有明显取舍时）
 

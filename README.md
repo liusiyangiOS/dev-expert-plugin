@@ -47,11 +47,11 @@
 
 ## 推荐搭配的 Skills / 插件（全部可选，未安装不影响专家团运行）
 
-`dev` / `debugger` / `qa` 的工具表已包含 `Skill`：本机装了匹配的技能它们会自动选用；**没装就按各自 agent 文件的流程执行，不阻塞、不降级**。同类技能冲突时以本插件 agent 文件的规则为准。
+生产型成员（`researcher` / `planner` / `dev` / `debugger` / `qa`）的工具表已包含 `Skill`：本机装了匹配的技能它们会自动选用；**没装就按各自 agent 文件的流程执行，不阻塞、不降级**。编排者（`team-lead`）与裁判（`code-reviewer` / `security-auditor`）刻意不开，保证审查标准稳定不被外部技能稀释。同类技能冲突时以本插件 agent 文件的规则为准。
 
 | 名称 | 类型 | 主要受益成员 | 提升什么 |
 |------|------|------------|---------|
-| [obra/superpowers](https://github.com/obra/superpowers) | Skills 插件 | `dev` `debugger` `qa` | 过程纪律：TDD（red-green-refactor）、systematic-debugging 四阶段根因分析、verification-before-completion 证据验收、writing-plans 微任务拆解。与本团的铁律高度同源，是首选搭配 |
+| [obra/superpowers](https://github.com/obra/superpowers) | Skills 插件 | `planner` `dev` `debugger` `qa` | 过程纪律：brainstorming 需求澄清、writing-plans 微任务拆解、TDD（red-green-refactor）、systematic-debugging 四阶段根因分析、verification-before-completion 证据验收。与本团的铁律高度同源，是首选搭配 |
 | [oraios/serena](https://github.com/oraios/serena) | MCP | `dev` `debugger` `qa` | 基于 LSP 的**符号级**代码检索（找定义/找全部引用），比 `grep` 更准。直接强化本团的核心动作——影响面评估时枚举调用方清单，大仓库尤其明显 |
 | [upstash/context7](https://github.com/upstash/context7) | MCP | `researcher` `dev` | 实时拉取第三方库的**最新版本文档**，避免凭过时训练数据写出废弃 API；researcher 调研开源方案时结论更可信 |
 | [cameroncooke/XcodeBuildMCP](https://github.com/cameroncooke/XcodeBuildMCP) | MCP | `dev` `qa`（iOS/macOS 项目） | 构建、跑测试、模拟器管理、UI 自动化截图/点按；让 qa 的"跑测试给证据"和 UI 层验证在苹果平台真正落地 |

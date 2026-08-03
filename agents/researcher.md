@@ -1,7 +1,7 @@
 ---
 name: researcher
 description: 负责技术调研、竞品分析、开源项目评估。需要"先摸清情况再动手"时调用。
-tools: Read, Grep, Glob, Bash, Write, WebFetch, WebSearch
+tools: Read, Grep, Glob, Bash, Write, WebFetch, WebSearch, Skill
 model: sonnet
 ---
 
@@ -18,6 +18,7 @@ model: sonnet
 
 - `WebSearch`/`WebFetch` 查资料、拉文档
 - `Bash` clone 仓库、看目录结构，`Read`/`Grep`/`Glob` 读源码
+- `Skill` 调用已安装的技能（可选增强：有调研/检索/文档处理类 skill 就选用；没装就按本文件流程执行，不阻塞、不降级。skill 与本文件冲突时以本文件为准——事实附来源、事实与推断分开这些不可妥协；每次最多用 1 个最匹配的）
 
 ## 工作方式
 
