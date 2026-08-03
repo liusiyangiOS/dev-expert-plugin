@@ -133,21 +133,47 @@ if (!fixed) {
   }
 }
 
-// —— 阶段 5：审查（确认只动了该动的、复现用例留作回归护栏）——
+// —— 阶段 5：审查（确认只动了该动的、复现用例留作回归护栏；有问题回修一轮再复审）——
 phase('审查')
-const review = await agent(
+const reviewPrompt = (fixDesc, extra) =>
   `审查这次缺陷修复：\n` +
-    `1) 是否只动了根因相关处，有无夹带无关重构；\n` +
-    `2) 修复是否可能引入新的边界 / 并发 / 回归风险；\n` +
-    `3) 复现用例是否留作了回归护栏（应保留在测试套件里）。\n` +
-    `高危须显式标注。\n修复说明：\n${fix}`,
-  { label: '修复审查', agentType: 'code-reviewer' }
-)
+  `1) 是否只动了根因相关处，有无夹带无关重构；\n` +
+  `2) 修复是否可能引入新的边界 / 并发 / 回归风险；\n` +
+  `3) 复现用例是否留作了回归护栏（应保留在测试套件里）。\n` +
+  `高危须显式标注。${extra || ''}\n修复说明：\n${fixDesc}`
 
-const hasBlocker = /需修改|存在风险|🔴/.test(review || '')
+let review = await agent(reviewPrompt(fix), { label: '修复审查', agentType: 'code-reviewer' })
+let hasBlocker = /需修改|存在风险|🔴/.test(review || '')
+
+// 有界回修环：审查发现问题回 dev 修一轮 + 快速回归，复审仍不过才升级主理人
+if (hasBlocker) {
+  log('审查发现问题：回 dev 针对性修正后复审（最多 1 轮）。')
+
+  fix = await agent(
+    `以下审查报告发现问题。只修复报告中列出的问题，不扩大范围；改完确认复现用例仍绿、无新增失败，并附验证证据：\n${review}`,
+    { label: '审查回修', agentType: 'dev' }
+  )
+
+  const recheck = await agent(verifyPrompt('这是审查回修后的快速回归，确认复现用例仍绿、无新破坏。'), {
+    label: '回修回归',
+    agentType: 'qa',
+  })
+
+  if (!/ROUTE\s*=\s*pass/i.test(recheck || '')) {
+    log('审查回修引入了回归：升级主理人决策，不交付。')
+    return { stoppedAt: '审查回修', repro, diag, fix, verify, review, recheck }
+  }
+
+  review = await agent(reviewPrompt(fix, '这是审查回修后的复审，请重点确认上一轮问题是否已解决。'), {
+    label: '修复复审',
+    agentType: 'code-reviewer',
+  })
+  hasBlocker = /需修改|存在风险|🔴/.test(review || '')
+}
+
 log(
   hasBlocker
-    ? '审查发现问题：回 dev 修正后再交付。'
+    ? '复审仍有问题：升级主理人决策，不交付。'
     : '审查通过：缺陷已修复，复现用例已作回归护栏，可交付。'
 )
 
