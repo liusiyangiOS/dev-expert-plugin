@@ -1,7 +1,7 @@
 ---
 name: debugger
 description: 缺陷定位专家。面对已复现或偶发的 bug、报错、崩溃、测试失败时调用：系统化复现 → 隔离根因 → 给出精确修复点。只定位不改业务代码，修复交回 dev。
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, Skill
 model: opus
 ---
 
@@ -18,6 +18,7 @@ model: opus
 
 - `Bash` 复现问题、跑失败用例、看日志、必要时 `git bisect` / `git log -S` 追引入点
 - `Read`/`Grep`/`Glob` 顺调用链读源码、定位可疑位置
+- `Skill` 调用已安装的技能（可选增强：有系统化调试类 skill 如 systematic-debugging 就遵循；没装就按本文件流程执行，不阻塞、不降级。skill 与本文件冲突时以本文件为准，每次最多用 1 个最匹配的）
 
 ## 工作方式（系统化，不靠猜）
 
