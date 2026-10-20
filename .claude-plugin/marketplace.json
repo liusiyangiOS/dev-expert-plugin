@@ -1,6 +1,6 @@
 {
   "name": "dev-expert",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "owner": {
     "name": "liusiyang",
     "url": "https://github.com/liusiyangiOS"
@@ -8,8 +8,9 @@
   "plugins": [
     {
       "name": "dev-expert-plugin",
-      "source": "./",
-      "description": "开发专家团：8 个研发专家 agent + 3 条开发工作流，覆盖调研、计划、开发、调试、测试、安全审计、代码审查与交付总控"
+      "source": "./packages/claude",
+      "description": "开发专家团：8 个专家、4 个技能，含根因诊断、条件快修、graph、历史失败复用与动态模型策略。"
     }
-  ]
+  ],
+  "description": "独立发行的 Claude 与 Codex 开发专家团；本市场入口安装 Claude 包。"
 }

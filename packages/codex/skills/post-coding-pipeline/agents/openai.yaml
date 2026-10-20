@@ -1,0 +1,4 @@
+interface:
+  display_name: 编码后质量门
+  short_description: 对最终改动快照执行只读构建、测试和双轨审查，给出提交前质量结论
+  default_prompt: 使用 $post-coding-pipeline 检查当前改动是否已经达到可提交状态。
