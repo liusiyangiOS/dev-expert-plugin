@@ -1,0 +1,31 @@
+name: Portable package checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.11", "3.14"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Distribution and isolation tests
+        run: python -X utf8 -m unittest discover -s tests -p "test_*.py" -v
+      - name: Model policy tests
+        run: python -X utf8 -m unittest discover -s packages/codex/skills/_shared -p "test_expert_models.py" -v
+      - name: Portable path audit
+        run: python -X utf8 tests/audit_paths.py
+      - name: Whitespace check
+        run: git diff --check

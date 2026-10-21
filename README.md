@@ -4,16 +4,18 @@
 
 **同仓库、独立发行。** `packages/claude` 与 `packages/codex` 各自包含完整角色、规则和模型策略；运行时互不读取，不使用软链接或硬链接，不共享模型缓存。安装一端不要求安装另一端。
 
+同一套包提供 Windows 原生、WSL2、macOS、Linux 的平台适配，不另建 Windows 专家团。**跨平台处理已加入；目前实际宿主验收在 macOS 完成，Windows/Linux CI 与实机结果尚未取得。** [平台安装与验证范围](docs/platforms.md) 说明手动复制位置、PowerShell 命令、路径与工具前提。
+
 ## 选择平台并安装
 
 | 平台 | 安装方式 | 完整文档 |
 | --- | --- | --- |
-| Claude Code | 原生插件市场；保留 `dev-expert-plugin@dev-expert` | [Claude 安装、更新与使用](packages/claude/README.md) |
+| Claude Code | 原生插件市场，或独立个人目录安装器 | [Claude 安装、更新与使用](packages/claude/README.md) |
 | Codex | Python 安装器复制角色与技能，默认不覆盖已有同名文件 | [Codex 安装、更新与使用](packages/codex/README.md) |
 
 ### Claude Code
 
-新版发布到 GitHub 后，在 Claude Code 中执行：
+本地准备版本为 2.0.1；发布到 GitHub 后，在 Claude Code 中执行：
 
 ```text
 /plugin marketplace add liusiyangiOS/dev-expert-plugin
@@ -33,6 +35,30 @@
 
 **验证尚未发布的本地版本**：终端执行 `claude plugin marketplace add /absolute/path/to/dev-expert-plugin`，再执行 `claude plugin install dev-expert-plugin@dev-expert`；临时加载可用 `claude --plugin-dir /absolute/path/to/dev-expert-plugin/packages/claude`。这里的路径要替换为自己的 checkout，不要同时加载同名插件的多个版本。
 
+Windows PowerShell 中可在仓库根执行 `claude plugin marketplace add "$((Get-Location).Path)"` 后安装；临时加载为 `claude --plugin-dir ".\packages\claude"`。本包角色适配宿主实际提供的 Bash/PowerShell。应整体加载插件，不把 `${CLAUDE_PLUGIN_ROOT}` 版角色/技能单独摊平到个人目录。
+
+### Claude 个人目录安装（与插件方式二选一）
+
+适合已有 `~/.claude/agents`、`~/.claude/skills` 安装的使用者。需要 Python 3.11+；在本仓库 checkout 根目录执行：
+
+```bash
+python3 packages/claude/install.py install --dry-run
+python3 packages/claude/install.py install
+python3 packages/claude/install.py check
+```
+
+Windows PowerShell：
+
+```powershell
+py -3 -X utf8 .\packages\claude\install.py install --dry-run
+py -3 -X utf8 .\packages\claude\install.py install
+py -3 -X utf8 .\packages\claude\install.py check
+```
+
+安装器把同一 Claude 包转换为个人目录形式：角色、四个技能、全部 `_shared` 规则都在当前用户 `.claude` 下；只转换资源路径和调用命名空间，质量规则保留。使用 `/expert-team-review`、`/bugfix-pipeline`、`/quick-fix`、`/post-coding-pipeline`，不带插件前缀。不同时启用本团插件和个人安装。非默认 `CLAUDE_CONFIG_DIR` 暂不支持此安装方式。
+
+同名文件或本机改动默认阻止覆盖；审阅后使用 `install --replace` 才备份替换。更新重复 `install`、`check`，卸载用 `uninstall`；缓存、历史失败和全局设置不变。
+
 ### Codex
 
 要求 Python 3.11+，以及支持独立 TOML 自定义角色、技能发现和子 Agent 的 Codex。
@@ -44,6 +70,16 @@ python3 packages/codex/install.py install --dry-run
 python3 packages/codex/install.py install
 python3 packages/codex/install.py check
 ```
+
+Windows PowerShell 在仓库根使用已核验的 Python 3.11+（没有 `py` 时改用实际 `python` 命令）：
+
+```powershell
+py -3 -X utf8 .\packages\codex\install.py install --dry-run
+py -3 -X utf8 .\packages\codex\install.py install
+py -3 -X utf8 .\packages\codex\install.py check
+```
+
+更新/卸载使用同一解释器调用 `install`/`uninstall`。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`_shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。
 
 上述 GitHub 命令需要新版已发布；当前本地审阅直接在本 checkout 执行 Python 命令即可。角色安装至 `~/.codex/agents`，技能及本端规则安装至 `~/.agents/skills`；Claude 包不读取这个目录。不改全局配置、凭据、无关文件，也不创建链接。有同名文件时先停止，确认需要替换后加 `--replace`，安装器会保存原文件备份。
 
@@ -57,6 +93,35 @@ $post-coding-pipeline 检查当前改动，不修改、不提交。
 ```
 
 更新：在 checkout 执行 `git pull --ff-only`，然后再次 `install`、`check`。卸载：`python3 packages/codex/install.py uninstall`。被用户修改的受管文件默认不会覆盖/删除。非默认 `CODEX_HOME` 暂不支持自动安装，详见本端文档。
+
+## 手动复制与本机同步
+
+**可以手动复制，但必须复制完整本端包并保持目录结构。** macOS 的 `~` 与 Windows 的 `%USERPROFILE%` 均指实际 Agent 用户主目录；WSL 使用其 Linux 用户目录。
+
+| 安装方式 | 复制内容与目标 |
+| --- | --- |
+| Codex | `packages/codex/agents` 内文件 → `~/.codex/agents`；`packages/codex/skills` 内所有目录（含 `_shared`、references 等）→ `~/.agents/skills` |
+| Claude 插件 | 保留完整 `packages/claude`，通过市场或 `claude --plugin-dir <包目录>` 加载；不要直接摊平到个人目录 |
+| Claude 个人目录 | 先用本端安装器 `install --home <空的暂存目录>` 生成，再将暂存目录中 `.claude/agents` 和 `.claude/skills` 的本团文件复制到用户 `.claude` 下；不要复制备份或其他个人数据 |
+
+手动复制不会自动建立本机安装清单，`check` 不会把未登记文件判为受管安装。需要后续可校验、可备份更新时，用对应安装器 `install --replace` 接管。普通复制即可，不使用软链接或硬链接，不覆盖无关角色/技能。
+
+**维护以仓库 `packages/<平台>` 为源码基准，修改后再安装到本机。** Codex 安装内容与包逐字节一致；Claude 个人版与安装器生成的内容逐字节一致，插件版保留插件路径，所以两种 Claude 形式不能直接互相覆盖。两端角色、策略和缓存仍完全独立。
+
+在更新仓库前、改完本机文件后，都可在仓库根运行以下检查；Windows 将 `python3` 换成 `py -3 -X utf8`：
+
+```bash
+python3 packages/codex/install.py check
+python3 packages/claude/install.py check
+```
+
+第二条用于 Claude 个人安装；插件版由插件管理器更新，不在缓存目录直接改源码。检查会报告缺失、被修改、版本不一致的受管文件。**如果曾在实际安装目录改过内容，先审阅这些差异并把需要保留的修改合入对应包，再安装；不要整目录反向覆盖仓库。** `install` 默认拒绝覆盖被改过的文件，只有显式 `--replace` 才备份替换；备份分别在 `~/.codex/expert-team/backups`、`~/.claude/expert-team/backups`。这不是后台双向同步，修改后需主动校验和安装。
+
+## 模型自动选择与更新
+
+**通常无需自己追踪新模型或手改型号。** 每次调用专家团时，主理人按本端策略检查用户指定、账号/宿主可用模型与缓存；正常缓存最长使用 72 小时，到期、失效或实际调用拒绝时重新核验，再用于本次专家分配。Codex 根据当前可用模型目录与官方信息解析型号；Claude 默认使用宿主模型别名并核验提供方映射，默认/疯狂模式分别记录有效期。
+
+这是**调用时检查、按策略刷新**，不是后台实时监听，也不保证新模型发布瞬间切换。用户显式指定优先，不擅自更换主对话模型，不自动升级 CLI。模型权限不足、提供方映射或家族命名变化、无法取得可靠依据时会明确报告，必要时需要处理；不会为了完成任务悄悄降档。模型缓存不随安装包发布，也不会因更新源码被重置。
 
 ## 四个流程与八个角色
 

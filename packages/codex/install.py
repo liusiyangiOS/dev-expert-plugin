@@ -4,7 +4,8 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import stat
 import sys
 import tempfile
 from datetime import datetime, timezone
@@ -21,8 +22,19 @@ def digest(data):
 
 
 def safe_relative(name):
-    p = Path(name)
-    return (not p.is_absolute() and ".." not in p.parts and
+    # Manifest keys use POSIX separators on every OS. Reject Windows drive,
+    # UNC, ADS and ambiguous filename forms even when validating on Unix.
+    if not isinstance(name, str) or "\\" in name or ":" in name:
+        return False
+    parts = name.split("/")
+    reserved = {"CON", "PRN", "AUX", "NUL"} | {
+        f"{prefix}{n}" for prefix in ("COM", "LPT") for n in range(1, 10)}
+    if any(not part or part in (".", "..") or part.endswith((" ", "."))
+           or part.split(".")[0].upper() in reserved
+           or any(ord(c) < 32 or c in '<>"|?*' for c in part) for part in parts):
+        return False
+    p = PurePosixPath(name)
+    return (not p.is_absolute() and
             ((len(p.parts) == 3 and p.parts[:2] == (".codex", "agents")
               and p.stem in ROLES and p.suffix == ".toml") or
              (len(p.parts) >= 4 and p.parts[:2] == (".agents", "skills")
@@ -31,11 +43,23 @@ def safe_relative(name):
 
 def check_path(path):
     for p in (path, *path.parents):
-        if p.is_symlink():
-            raise ValueError(f"拒绝通过软链接读写：{p}")
+        if is_redirect(p):
+            raise ValueError(f"拒绝通过软链接或目录联接读写：{p}")
     if path.exists():
         if not path.is_file() or path.stat().st_nlink != 1:
             raise ValueError(f"目标不是独立普通文件：{path}")
+
+
+def is_redirect(path):
+    if path.is_symlink():
+        return True
+    try:
+        info = path.lstat()
+    except FileNotFoundError:
+        return False
+    # Path.is_junction() requires Python 3.12; this also covers Python 3.11.
+    return getattr(info, "st_reparse_tag", None) == getattr(
+        stat, "IO_REPARSE_TAG_MOUNT_POINT", 0xA0000003)
 
 
 def atomic_write(path, data):
@@ -54,7 +78,7 @@ def payload():
     files = {}
     for folder, prefix in (("agents", ".codex/agents"), ("skills", ".agents/skills")):
         for src in sorted((PACKAGE / folder).rglob("*")):
-            if src.is_dir() and not src.is_symlink():
+            if src.is_dir() and not is_redirect(src):
                 continue
             if "__pycache__" in src.parts or src.name == ".DS_Store":
                 continue
@@ -80,7 +104,9 @@ def run(args):
             raise ValueError("当前 CODEX_HOME 非默认目录；本安装包只支持默认用户布局。请使用独立测试 --home，或先按 README 处理自定义布局。")
     state = home / ".codex/expert-team/install-manifest.json"
     check_path(state)
-    old = json.loads(state.read_text()) if state.exists() else {"files": {}}
+    old = json.loads(state.read_text(encoding="utf-8")) if state.exists() else {"files": {}}
+    if not isinstance(old, dict):
+        raise ValueError("安装清单必须是 JSON 对象")
     owned = old.get("files")
     if not isinstance(owned, dict) or any(not safe_relative(n) for n in owned):
         raise ValueError("安装清单损坏或包含越界路径")
@@ -128,7 +154,7 @@ def run(args):
         atomic_write(backup / "manifest.json", json.dumps({
             "command": args.command, "previous_install_manifest": old,
             "files": {n: b is not None for n, (b, _) in changes.items()}
-        }, ensure_ascii=False, indent=2).encode())
+        }, ensure_ascii=False, indent=2).encode("utf-8"))
     applied = []
     try:
         for name, (before, after) in changes.items():
@@ -140,9 +166,9 @@ def run(args):
             applied.append(name)
         if args.command == "install":
             atomic_write(state, json.dumps({
-                "schema_version": 1, "package": "dev-expert-codex", "version": "2.0.0",
+                "schema_version": 1, "package": "dev-expert-codex", "version": "2.0.1",
                 "files": {n: digest(b) for n, b in desired.items()}
-            }, ensure_ascii=False, indent=2).encode())
+            }, ensure_ascii=False, indent=2).encode("utf-8"))
         else:
             state.unlink()
     except BaseException:
@@ -163,6 +189,9 @@ def run(args):
 
 
 def main():
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["install", "check", "uninstall"])
     parser.add_argument("--home", type=Path, default=Path.home(), help="目标用户目录；测试用空目录")

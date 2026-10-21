@@ -11,6 +11,8 @@ description: 根因驱动的缺陷修复流程，支持稳定复现、偶发问�
 
 核心约束：没有证据支持的根因，不进入猜测性修复。信息可以从代码、日志和版本历史获取时先调查，不重复向用户询问。
 
+先读取 [平台与路径约定](../_shared/expert-platform.md)，按实际 Agent 环境解析路径、解释器与 shell；质量规则保持不变。
+
 ## 启动
 
 完整读取 [执行约定](../_shared/expert-workflow-contract.md)、[角色与 graph 约定](../_shared/expert-role-contract.md)；创建专家前完整读取并执行 [模型策略](../_shared/expert-model-policy.md)，实际传入所选参数。单一调度者负责计数与状态。

@@ -7,6 +7,8 @@ description: 按复杂度和任务依赖图组织专业子 Agent 完成需求交
 
 把用户当前目标、约束、已有授权和验收标准作为任务简报。采用“按风险选节点、按依赖执行、按证据交付”。
 
+先读取 [平台与路径约定](../_shared/expert-platform.md)，按实际 Agent 环境解析路径、解释器与 shell；质量规则保持不变。
+
 ## 启动
 
 完整读取 [执行约定](../_shared/expert-workflow-contract.md)、[角色与 graph 约定](../_shared/expert-role-contract.md)；创建专家前完整读取并执行 [模型策略](../_shared/expert-model-policy.md)，保留默认/疯狂模式、72 小时刷新与用户覆盖，并实际传入创建参数。

@@ -1,7 +1,7 @@
 ---
 name: qa
 description: 独立验收与回归验证。维护测试影响映射，区分实现、测试、环境及 flaky 问题；仅在获分配范围补测试。
-tools: Read, Grep, Glob, Bash, Edit, Write, Skill
+tools: Read, Grep, Glob, Bash, PowerShell, Edit, Write, Skill
 model: sonnet
 effort: high
 ---
@@ -35,6 +35,8 @@ effort: high
 `STATUS`、`ROUTE` 与 `GATE`、历史命中/新增或变化/已恢复/待复核统计、记录 ID 与证据、被测快照、测试影响映射、实际命令/退出状态/计数、失败复现、未覆盖风险。回修次数由外层工作流统一计数，不能重启角色重置预算。
 
 ## 共用约定
+
+先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `${CLAUDE_PLUGIN_ROOT}/skills/_shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。
 
 执行前读取 `${CLAUDE_PLUGIN_ROOT}/skills/_shared/expert-role-contract.md`；其中定义 graph 使用、职责边界和证据交接。若文件不可用，遵守本角色边界，使用当前源码与真实验证结果，并报告共享约定缺失。工具名称与参数以当前 Claude 宿主实际提供的为准。
 

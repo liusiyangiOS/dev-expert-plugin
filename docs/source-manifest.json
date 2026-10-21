@@ -4,314 +4,404 @@
     "source": ".claude/agents/planner.md",
     "destination": "packages/claude/agents/planner.md",
     "source_sha256": "f40e9cd4f920734fba2679b95a3e67dedb2e79f3e6548cddf018c2bb233d0282",
-    "packaged_sha256": "6be81b979eb5c38c4b3b2d7006ddf333583fb7867fcab2100993c8942f12d4ca"
+    "packaged_sha256": "37fbe9967ed73629e0ce0a81f635e0964344be67129844ab27ca29d040705189",
+    "packaged_2_0_0_sha256": "6be81b979eb5c38c4b3b2d7006ddf333583fb7867fcab2100993c8942f12d4ca",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/dev.md",
     "destination": "packages/claude/agents/dev.md",
     "source_sha256": "5932bc5e8a4a81dfa21e5956899ebda17293fe00e097723cc665448fd60a8a8e",
-    "packaged_sha256": "dc9fb5eed5b1c3b350c60f78e829f6a2dff80d305aca7af1e90c2178cf9f6b9a"
+    "packaged_sha256": "af68ca45b99c271a373ad571fb099a3e2f73ed05d0b0c1048178f28e89957a01",
+    "packaged_2_0_0_sha256": "dc9fb5eed5b1c3b350c60f78e829f6a2dff80d305aca7af1e90c2178cf9f6b9a",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/qa.md",
     "destination": "packages/claude/agents/qa.md",
     "source_sha256": "c04f83a8388d0a513325f4b553e66a0087a0cc1662281893d6ad79fe1fac1d17",
-    "packaged_sha256": "5fb93ac5a220e939add151a6a28818c204c380ea57c8e225f9d835a9473964c0"
+    "packaged_sha256": "f1fd71be6e333dfe1f630db57120305fd25c36568a8ea9e8983dc3c91b0504ab",
+    "packaged_2_0_0_sha256": "5fb93ac5a220e939add151a6a28818c204c380ea57c8e225f9d835a9473964c0",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/debugger.md",
     "destination": "packages/claude/agents/debugger.md",
     "source_sha256": "b6b300ff8c6e6a18ad1f4d13fee50c075ae36cada06cef6508452db5f071521d",
-    "packaged_sha256": "dccb7a79b2e20422e9a0b3b0164a1a3c541dba6d814e7aeab447c0fa23d9551b"
+    "packaged_sha256": "24e77d77820af7fcc5a890e67cb874d939a94c3370bcc40f6eb5b55af573e4f0",
+    "packaged_2_0_0_sha256": "dccb7a79b2e20422e9a0b3b0164a1a3c541dba6d814e7aeab447c0fa23d9551b",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/researcher.md",
     "destination": "packages/claude/agents/researcher.md",
     "source_sha256": "b1c759e8121da3240e1fa3a5f860aecf68dff0e3cecf0e826ef14ff2b5495144",
-    "packaged_sha256": "d32178cd8ff4aa5820e6bc980a4f3de5f505648af986cf1a9c643ac00f472f67"
+    "packaged_sha256": "cd57da13d1d5837f4804a3c8767bb8187228393c3ea45535b94b03c8d81b8957",
+    "packaged_2_0_0_sha256": "d32178cd8ff4aa5820e6bc980a4f3de5f505648af986cf1a9c643ac00f472f67",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/code-reviewer.md",
     "destination": "packages/claude/agents/code-reviewer.md",
     "source_sha256": "14b7ce422f00ffc0321d5c86289b3190d2f92386396ab2cad9e03631d096887d",
-    "packaged_sha256": "ced152932f6ae2f28add339549276d180f1c7f9485374cbcb7a22b0fca9657ae"
+    "packaged_sha256": "dd36e6060af00b651855704c62e47dd53db38dfd4a7f3bf6866c5d455413ce77",
+    "packaged_2_0_0_sha256": "ced152932f6ae2f28add339549276d180f1c7f9485374cbcb7a22b0fca9657ae",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/security-auditor.md",
     "destination": "packages/claude/agents/security-auditor.md",
     "source_sha256": "865e61064ee97e4b6ea6910d7b45734cb35b77279ee502f8bbd441b7d94f727f",
-    "packaged_sha256": "7453eaca27fa5415a77914be42079420695fb7a171a8830371c506832cad00dd"
+    "packaged_sha256": "9c51c03f7bee9bcc00cb4756e9d23f20127748d5c0b107240cd9a1ff18d026a9",
+    "packaged_2_0_0_sha256": "7453eaca27fa5415a77914be42079420695fb7a171a8830371c506832cad00dd",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/agents/team-lead.md",
     "destination": "packages/claude/agents/team-lead.md",
     "source_sha256": "da16c21e251ce033ae00efb8be6638beb893d6a81ecae09c86c87300a4acb3ca",
-    "packaged_sha256": "a604d716b0d225804c2c146fbbefc23efb71c12fc3f33bc9f1c898c4109a3689"
+    "packaged_sha256": "b8239256ab9fa8aec090168e123505945ac158364360af950c54cde2b08b269d",
+    "packaged_2_0_0_sha256": "a604d716b0d225804c2c146fbbefc23efb71c12fc3f33bc9f1c898c4109a3689",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/expert-team-review/SKILL.md",
     "destination": "packages/claude/skills/expert-team-review/SKILL.md",
     "source_sha256": "38f404d1f101240db8e841f6b0918706162e5f95c63a63cbaafc4a7b97ea520d",
-    "packaged_sha256": "38f404d1f101240db8e841f6b0918706162e5f95c63a63cbaafc4a7b97ea520d"
+    "packaged_sha256": "386f700b2c81073a238060d7202462a7993808f2b19e278f2a85185bf1b4b178",
+    "packaged_2_0_0_sha256": "38f404d1f101240db8e841f6b0918706162e5f95c63a63cbaafc4a7b97ea520d",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/bugfix-pipeline/SKILL.md",
     "destination": "packages/claude/skills/bugfix-pipeline/SKILL.md",
     "source_sha256": "c6ca8579cfa8c2477cb019fba405931065958e7fb64191424a60913eb69ced5a",
-    "packaged_sha256": "c6ca8579cfa8c2477cb019fba405931065958e7fb64191424a60913eb69ced5a"
+    "packaged_sha256": "cd7f5c604d2e1af4010bf4588acfcd556d4925002f47db89e03dde6a579576c4",
+    "packaged_2_0_0_sha256": "c6ca8579cfa8c2477cb019fba405931065958e7fb64191424a60913eb69ced5a",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/post-coding-pipeline/SKILL.md",
     "destination": "packages/claude/skills/post-coding-pipeline/SKILL.md",
     "source_sha256": "354742a01341c79d44704799c001ebda7cff8395742a6a3088251ddeee79945c",
-    "packaged_sha256": "354742a01341c79d44704799c001ebda7cff8395742a6a3088251ddeee79945c"
+    "packaged_sha256": "4c3504aabba87bef0a9817e2076df83f9402524f6b6884fbccbbae05771d6edd",
+    "packaged_2_0_0_sha256": "354742a01341c79d44704799c001ebda7cff8395742a6a3088251ddeee79945c",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/quick-fix/SKILL.md",
     "destination": "packages/claude/skills/quick-fix/SKILL.md",
     "source_sha256": "9a37aeb51f5be45e0b105be30ddabd36095d06b04ccf04cf5bb93422fc5a17d8",
-    "packaged_sha256": "52ee24e7dd9665b63861b7289a9fcd9150849f16ee2aaae06a2316900dba6090"
+    "packaged_sha256": "28e8eb000aa02450255744733d6028b12156362a3be562380d2293bdbc467f5d",
+    "packaged_2_0_0_sha256": "52ee24e7dd9665b63861b7289a9fcd9150849f16ee2aaae06a2316900dba6090",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/_shared/expert-role-contract.md",
     "destination": "packages/claude/skills/_shared/expert-role-contract.md",
     "source_sha256": "5991f79f010c8ef708875a5105bcc9d12366000e4760b8d7bc3ba9e843b4dbf5",
-    "packaged_sha256": "5991f79f010c8ef708875a5105bcc9d12366000e4760b8d7bc3ba9e843b4dbf5"
+    "packaged_sha256": "5991f79f010c8ef708875a5105bcc9d12366000e4760b8d7bc3ba9e843b4dbf5",
+    "packaged_2_0_0_sha256": "5991f79f010c8ef708875a5105bcc9d12366000e4760b8d7bc3ba9e843b4dbf5",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/_shared/expert-evaluation-cases.md",
     "destination": "packages/claude/skills/_shared/expert-evaluation-cases.md",
     "source_sha256": "6417db487410827b8311f727dba08af7fb4ebdb2f3d4f6b90b77ef7059edeccb",
-    "packaged_sha256": "6417db487410827b8311f727dba08af7fb4ebdb2f3d4f6b90b77ef7059edeccb"
+    "packaged_sha256": "6417db487410827b8311f727dba08af7fb4ebdb2f3d4f6b90b77ef7059edeccb",
+    "packaged_2_0_0_sha256": "6417db487410827b8311f727dba08af7fb4ebdb2f3d4f6b90b77ef7059edeccb",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/_shared/expert-team-runtime.md",
     "destination": "packages/claude/skills/_shared/expert-team-runtime.md",
     "source_sha256": "fbf05055e803f9ec592dd1cbb537f85981921c8b337d396aa5bec57825ff0006",
-    "packaged_sha256": "dd7c7a9cf942850c0a7d6d68b50194dd737351605c039d124ff08bedb0b80872"
+    "packaged_sha256": "6a83637c04e26172dc6f3d3c0eabb17e068147d2f0af4a45c91e45ae4848b7f5",
+    "packaged_2_0_0_sha256": "dd7c7a9cf942850c0a7d6d68b50194dd737351605c039d124ff08bedb0b80872",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/_shared/expert-model-policy.md",
     "destination": "packages/claude/skills/_shared/expert-model-policy.md",
     "source_sha256": "3768b2effe18d7c6c732b950bb8b6e4154e13878349ab3a2432c228fc71a3384",
-    "packaged_sha256": "fa0d8c2749ce2ad1056d64a2dc8676d51b9452be9267d1070845833bb548a3fa"
+    "packaged_sha256": "5ad48e2635124c98fd5206a222ba2dfd925a2a990164c6bd1cd562a05ae2c935",
+    "packaged_2_0_0_sha256": "fa0d8c2749ce2ad1056d64a2dc8676d51b9452be9267d1070845833bb548a3fa",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/_shared/expert-workflow-contract.md",
     "destination": "packages/claude/skills/_shared/expert-workflow-contract.md",
     "source_sha256": "944c55ea35fc16bb045d84f0a1b1e434e438b670a2c1020c6cc4a13861855bad",
-    "packaged_sha256": "944c55ea35fc16bb045d84f0a1b1e434e438b670a2c1020c6cc4a13861855bad"
+    "packaged_sha256": "944c55ea35fc16bb045d84f0a1b1e434e438b670a2c1020c6cc4a13861855bad",
+    "packaged_2_0_0_sha256": "944c55ea35fc16bb045d84f0a1b1e434e438b670a2c1020c6cc4a13861855bad",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "claude",
     "source": ".claude/skills/_shared/expert-known-failures.md",
     "destination": "packages/claude/skills/_shared/expert-known-failures.md",
     "source_sha256": "53217b2107ea26cff81d33abb7d82598aad1633f9bd3dd27a86a5ea8e4b72634",
-    "packaged_sha256": "53217b2107ea26cff81d33abb7d82598aad1633f9bd3dd27a86a5ea8e4b72634"
+    "packaged_sha256": "53217b2107ea26cff81d33abb7d82598aad1633f9bd3dd27a86a5ea8e4b72634",
+    "packaged_2_0_0_sha256": "53217b2107ea26cff81d33abb7d82598aad1633f9bd3dd27a86a5ea8e4b72634",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/planner.toml",
     "destination": "packages/codex/agents/planner.toml",
     "source_sha256": "d85bfc23923b34c7a172f2978d44b38c63881dd6c8f10d92cad7cf29faa36c53",
-    "packaged_sha256": "d85bfc23923b34c7a172f2978d44b38c63881dd6c8f10d92cad7cf29faa36c53"
+    "packaged_sha256": "f07731bce7b8ffc47020ce9920f42ad294118267c55c16b00ae0a69eab7a5679",
+    "packaged_2_0_0_sha256": "d85bfc23923b34c7a172f2978d44b38c63881dd6c8f10d92cad7cf29faa36c53",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/dev.toml",
     "destination": "packages/codex/agents/dev.toml",
     "source_sha256": "95dec7ca6d39f90e70c4fed1e8f028398037a96b60d98d8afa893e00e8f9efad",
-    "packaged_sha256": "95dec7ca6d39f90e70c4fed1e8f028398037a96b60d98d8afa893e00e8f9efad"
+    "packaged_sha256": "13aa5eb59984302058281ec2e88d99e4f019f9ffc6a754cdf8217b416f08bdd9",
+    "packaged_2_0_0_sha256": "95dec7ca6d39f90e70c4fed1e8f028398037a96b60d98d8afa893e00e8f9efad",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/qa.toml",
     "destination": "packages/codex/agents/qa.toml",
     "source_sha256": "306eb828d2016d0150d40f962e9e2d2e92bf68d1760db0953ec591ace163521e",
-    "packaged_sha256": "306eb828d2016d0150d40f962e9e2d2e92bf68d1760db0953ec591ace163521e"
+    "packaged_sha256": "e6100e677f96404b7d3b419a07ad8dc35a1adb7047a71f117167dc08d03dcc2c",
+    "packaged_2_0_0_sha256": "306eb828d2016d0150d40f962e9e2d2e92bf68d1760db0953ec591ace163521e",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/debugger.toml",
     "destination": "packages/codex/agents/debugger.toml",
     "source_sha256": "79ecb9514251536a923a0e5016e90ab1900ecf5d9543f5cc45d63b926cb425d4",
-    "packaged_sha256": "79ecb9514251536a923a0e5016e90ab1900ecf5d9543f5cc45d63b926cb425d4"
+    "packaged_sha256": "94f560196238f7cbaf9fbd0f963151b87f5ccbbb49a8e298cfa7c620477826e0",
+    "packaged_2_0_0_sha256": "79ecb9514251536a923a0e5016e90ab1900ecf5d9543f5cc45d63b926cb425d4",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/researcher.toml",
     "destination": "packages/codex/agents/researcher.toml",
     "source_sha256": "0e9034cd996945e414e878d960e95d5090066fe4edf4207b03d77bae5f3f7b04",
-    "packaged_sha256": "0e9034cd996945e414e878d960e95d5090066fe4edf4207b03d77bae5f3f7b04"
+    "packaged_sha256": "d9d3e768d49e4d63a74387c4d003a926def2e29bd9c9735a9b3406b8b6f57ed5",
+    "packaged_2_0_0_sha256": "0e9034cd996945e414e878d960e95d5090066fe4edf4207b03d77bae5f3f7b04",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/code-reviewer.toml",
     "destination": "packages/codex/agents/code-reviewer.toml",
     "source_sha256": "e437ed76e5f0065d0e6d67b14c72e563dae80bd3a611b9bb5e17ac7c3d4bd385",
-    "packaged_sha256": "e437ed76e5f0065d0e6d67b14c72e563dae80bd3a611b9bb5e17ac7c3d4bd385"
+    "packaged_sha256": "69edb929d8ae62eeb5f3990a9aebb55b923fe092450a4c5acbeabd8b58d273ef",
+    "packaged_2_0_0_sha256": "e437ed76e5f0065d0e6d67b14c72e563dae80bd3a611b9bb5e17ac7c3d4bd385",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/security-auditor.toml",
     "destination": "packages/codex/agents/security-auditor.toml",
     "source_sha256": "9b286a93182588f828aa6b1e881bcfbc735f43120467370fb23cd56a66393f4e",
-    "packaged_sha256": "9b286a93182588f828aa6b1e881bcfbc735f43120467370fb23cd56a66393f4e"
+    "packaged_sha256": "f86c071f844633813398b2651cf77240e667fbddc524903c3bf33528cc796b12",
+    "packaged_2_0_0_sha256": "9b286a93182588f828aa6b1e881bcfbc735f43120467370fb23cd56a66393f4e",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".codex/agents/team-lead.toml",
     "destination": "packages/codex/agents/team-lead.toml",
     "source_sha256": "295d000e2dd911a55a950474c9fa4f1464dc5331ccf1a2c16ad8bfcf20f1de1e",
-    "packaged_sha256": "295d000e2dd911a55a950474c9fa4f1464dc5331ccf1a2c16ad8bfcf20f1de1e"
+    "packaged_sha256": "120bdc182a1346744a19210d5baff88a8b46c033e7ca462c4c75420de07cec4b",
+    "packaged_2_0_0_sha256": "295d000e2dd911a55a950474c9fa4f1464dc5331ccf1a2c16ad8bfcf20f1de1e",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/expert-team-review/SKILL.md",
     "destination": "packages/codex/skills/expert-team-review/SKILL.md",
     "source_sha256": "b84fbc1a49e74f4895cd16886f2db5011eb4973d0736fabdcddeb2814e1dab42",
-    "packaged_sha256": "b84fbc1a49e74f4895cd16886f2db5011eb4973d0736fabdcddeb2814e1dab42"
+    "packaged_sha256": "0cd1bfd9125b22fe57a09e4ce016ad4e89caf7a695232192c417f9a9cd241929",
+    "packaged_2_0_0_sha256": "b84fbc1a49e74f4895cd16886f2db5011eb4973d0736fabdcddeb2814e1dab42",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/expert-team-review/references/original-workflow.js",
     "destination": "packages/codex/skills/expert-team-review/references/original-workflow.js",
     "source_sha256": "77d030d8625725e03c286300d12fd7a77454ae2d8222b2926e16a91e31e40c5f",
-    "packaged_sha256": "77d030d8625725e03c286300d12fd7a77454ae2d8222b2926e16a91e31e40c5f"
+    "packaged_sha256": "77d030d8625725e03c286300d12fd7a77454ae2d8222b2926e16a91e31e40c5f",
+    "packaged_2_0_0_sha256": "77d030d8625725e03c286300d12fd7a77454ae2d8222b2926e16a91e31e40c5f",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/expert-team-review/agents/openai.yaml",
     "destination": "packages/codex/skills/expert-team-review/agents/openai.yaml",
     "source_sha256": "611bb64d791b0f15285f2e79ae19411b8993d5c8ea82f0f6f1c43b6ca7005b5b",
-    "packaged_sha256": "611bb64d791b0f15285f2e79ae19411b8993d5c8ea82f0f6f1c43b6ca7005b5b"
+    "packaged_sha256": "611bb64d791b0f15285f2e79ae19411b8993d5c8ea82f0f6f1c43b6ca7005b5b",
+    "packaged_2_0_0_sha256": "611bb64d791b0f15285f2e79ae19411b8993d5c8ea82f0f6f1c43b6ca7005b5b",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/bugfix-pipeline/SKILL.md",
     "destination": "packages/codex/skills/bugfix-pipeline/SKILL.md",
     "source_sha256": "74065e249cf74f35e948f7b69162861a6be3c5eff761b5f13432cedeb308dfb2",
-    "packaged_sha256": "74065e249cf74f35e948f7b69162861a6be3c5eff761b5f13432cedeb308dfb2"
+    "packaged_sha256": "1bb6fec67e690793be5bc7e210b63106aa88a27dab189663bf2db5fec82ee539",
+    "packaged_2_0_0_sha256": "74065e249cf74f35e948f7b69162861a6be3c5eff761b5f13432cedeb308dfb2",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/bugfix-pipeline/references/original-workflow.js",
     "destination": "packages/codex/skills/bugfix-pipeline/references/original-workflow.js",
     "source_sha256": "6393684a9a5ee24b02374f72683217e3b37ebfef3495c623b1dfa8127fbfb343",
-    "packaged_sha256": "6393684a9a5ee24b02374f72683217e3b37ebfef3495c623b1dfa8127fbfb343"
+    "packaged_sha256": "6393684a9a5ee24b02374f72683217e3b37ebfef3495c623b1dfa8127fbfb343",
+    "packaged_2_0_0_sha256": "6393684a9a5ee24b02374f72683217e3b37ebfef3495c623b1dfa8127fbfb343",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/bugfix-pipeline/agents/openai.yaml",
     "destination": "packages/codex/skills/bugfix-pipeline/agents/openai.yaml",
     "source_sha256": "3775e3c5f6737d9204bc93d615c759849ea98a8e05add79c376524126e49dfea",
-    "packaged_sha256": "3775e3c5f6737d9204bc93d615c759849ea98a8e05add79c376524126e49dfea"
+    "packaged_sha256": "3775e3c5f6737d9204bc93d615c759849ea98a8e05add79c376524126e49dfea",
+    "packaged_2_0_0_sha256": "3775e3c5f6737d9204bc93d615c759849ea98a8e05add79c376524126e49dfea",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/post-coding-pipeline/SKILL.md",
     "destination": "packages/codex/skills/post-coding-pipeline/SKILL.md",
     "source_sha256": "d9e88fb19133aebb3bfb8482203697bd95c71034768e332d877c90e184665ad4",
-    "packaged_sha256": "d9e88fb19133aebb3bfb8482203697bd95c71034768e332d877c90e184665ad4"
+    "packaged_sha256": "d8b0fbb29f16ba5c8e6fc5f0498d61021192b0563dcdabd57f5f8b0ee7e585c0",
+    "packaged_2_0_0_sha256": "d9e88fb19133aebb3bfb8482203697bd95c71034768e332d877c90e184665ad4",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/post-coding-pipeline/references/original-workflow.js",
     "destination": "packages/codex/skills/post-coding-pipeline/references/original-workflow.js",
     "source_sha256": "acd188862e3e1f0b8c4684b5b8a6f1418604a035e056aafc1d60e3f018df4267",
-    "packaged_sha256": "acd188862e3e1f0b8c4684b5b8a6f1418604a035e056aafc1d60e3f018df4267"
+    "packaged_sha256": "acd188862e3e1f0b8c4684b5b8a6f1418604a035e056aafc1d60e3f018df4267",
+    "packaged_2_0_0_sha256": "acd188862e3e1f0b8c4684b5b8a6f1418604a035e056aafc1d60e3f018df4267",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/post-coding-pipeline/agents/openai.yaml",
     "destination": "packages/codex/skills/post-coding-pipeline/agents/openai.yaml",
     "source_sha256": "872df4ecf367eee0b609ea1f20ff12b5ccafd1c11e60d92fa6d69e70826b322b",
-    "packaged_sha256": "872df4ecf367eee0b609ea1f20ff12b5ccafd1c11e60d92fa6d69e70826b322b"
+    "packaged_sha256": "872df4ecf367eee0b609ea1f20ff12b5ccafd1c11e60d92fa6d69e70826b322b",
+    "packaged_2_0_0_sha256": "872df4ecf367eee0b609ea1f20ff12b5ccafd1c11e60d92fa6d69e70826b322b",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/quick-fix/SKILL.md",
     "destination": "packages/codex/skills/quick-fix/SKILL.md",
     "source_sha256": "eda9e3a2d37b7b6bab0931918e386b8af68b7acc8c739b1f825bad183e6335d3",
-    "packaged_sha256": "f4da3d45a5d2e04a61535b3fd9a7033fc75453a8a2219829dceb0b059b94842b"
+    "packaged_sha256": "a3595351ec37109a2307849878b974eb078740e048fe558319e5c78816dedcc3",
+    "packaged_2_0_0_sha256": "f4da3d45a5d2e04a61535b3fd9a7033fc75453a8a2219829dceb0b059b94842b",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/quick-fix/references/model-selection.md",
     "destination": "packages/codex/skills/quick-fix/references/model-selection.md",
     "source_sha256": "19ac85928db6f07e48fd864a3d03fc63874f2d14036fe6bcdf2b4fe441fa4872",
-    "packaged_sha256": "45579979b046a0ee6b22b4512becc1d944ee7df27f1ea4f270895d94f5d58eca"
+    "packaged_sha256": "45579979b046a0ee6b22b4512becc1d944ee7df27f1ea4f270895d94f5d58eca",
+    "packaged_2_0_0_sha256": "45579979b046a0ee6b22b4512becc1d944ee7df27f1ea4f270895d94f5d58eca",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/quick-fix/agents/openai.yaml",
     "destination": "packages/codex/skills/quick-fix/agents/openai.yaml",
     "source_sha256": "e6f017f73d9b1a4f7c1c6ea389ccb22bd05b7b0698eebcca965fbfd7b9a59acd",
-    "packaged_sha256": "e6f017f73d9b1a4f7c1c6ea389ccb22bd05b7b0698eebcca965fbfd7b9a59acd"
+    "packaged_sha256": "e6f017f73d9b1a4f7c1c6ea389ccb22bd05b7b0698eebcca965fbfd7b9a59acd",
+    "packaged_2_0_0_sha256": "e6f017f73d9b1a4f7c1c6ea389ccb22bd05b7b0698eebcca965fbfd7b9a59acd",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/test_expert_models.py",
     "destination": "packages/codex/skills/_shared/test_expert_models.py",
     "source_sha256": "1b229edc5ced9cc1c84e0c641657a05fecb23937734a4dde6c69e53c79464851",
-    "packaged_sha256": "1b229edc5ced9cc1c84e0c641657a05fecb23937734a4dde6c69e53c79464851"
+    "packaged_sha256": "16ace1354f0cfac4277a4e4b44db1ced09a3c38d02e5e95394679d0261eabc39",
+    "packaged_2_0_0_sha256": "1b229edc5ced9cc1c84e0c641657a05fecb23937734a4dde6c69e53c79464851",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/expert_models.py",
     "destination": "packages/codex/skills/_shared/expert_models.py",
     "source_sha256": "7d1b7da563219e20acd5a3a4364862db10bcf8471ef422eafe780f750dc2627d",
-    "packaged_sha256": "f69d27cf68d5684d89c18c182fbf1b06d04d0a203155041f403641ebf3e014b6"
+    "packaged_sha256": "b78d9c35173b3e8f8c03e9631bc050b7d504cf4344e86203ace6e8ed5aacf162",
+    "packaged_2_0_0_sha256": "f69d27cf68d5684d89c18c182fbf1b06d04d0a203155041f403641ebf3e014b6",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/expert-role-contract.md",
     "destination": "packages/codex/skills/_shared/expert-role-contract.md",
     "source_sha256": "a7428131f3d5bcb2ed9ae07485f5fa436a8d19e4bd18873f2bfa096f3097554f",
-    "packaged_sha256": "a7428131f3d5bcb2ed9ae07485f5fa436a8d19e4bd18873f2bfa096f3097554f"
+    "packaged_sha256": "43278456169da7010d7d61d8df0d22284fcaeb675d305e3339262e402fb8f491",
+    "packaged_2_0_0_sha256": "a7428131f3d5bcb2ed9ae07485f5fa436a8d19e4bd18873f2bfa096f3097554f",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/expert-evaluation-cases.md",
     "destination": "packages/codex/skills/_shared/expert-evaluation-cases.md",
     "source_sha256": "9251ddac32f2f2d8027124b81ce63851b9f933cbc23b8ce3d0f2fdb83592fc67",
-    "packaged_sha256": "9251ddac32f2f2d8027124b81ce63851b9f933cbc23b8ce3d0f2fdb83592fc67"
+    "packaged_sha256": "9251ddac32f2f2d8027124b81ce63851b9f933cbc23b8ce3d0f2fdb83592fc67",
+    "packaged_2_0_0_sha256": "9251ddac32f2f2d8027124b81ce63851b9f933cbc23b8ce3d0f2fdb83592fc67",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/expert-model-policy.md",
     "destination": "packages/codex/skills/_shared/expert-model-policy.md",
     "source_sha256": "7e9d6d6b2c2412993df24f9405c162a7f1946667e314fe92c610ecdfb2c26eb7",
-    "packaged_sha256": "ca7cb91123e385ddb51a86ad07634fbd7b9e27f0e1068d5ff02634f2ea102e2a"
+    "packaged_sha256": "6734d7a317804aad8ac0ac45e298284626ec843accd5a4a9849e704fb56a8950",
+    "packaged_2_0_0_sha256": "ca7cb91123e385ddb51a86ad07634fbd7b9e27f0e1068d5ff02634f2ea102e2a",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/expert-workflow-contract.md",
     "destination": "packages/codex/skills/_shared/expert-workflow-contract.md",
     "source_sha256": "7513657ec541625cfc8cc945a70157dc3e3292b95838cb70911fc4bfe097db04",
-    "packaged_sha256": "7c142f42d09a5c2020d04a73a0825755c54693460790a6472657984400f542cd"
+    "packaged_sha256": "7c142f42d09a5c2020d04a73a0825755c54693460790a6472657984400f542cd",
+    "packaged_2_0_0_sha256": "7c142f42d09a5c2020d04a73a0825755c54693460790a6472657984400f542cd",
+    "packaged_version": "2.0.1"
   },
   {
     "platform": "codex",
     "source": ".agents/skills/_shared/expert-known-failures.md",
     "destination": "packages/codex/skills/_shared/expert-known-failures.md",
     "source_sha256": "da8a5dab717bdd18361594d64ac37b07424f01f422d5ea0ef808db19d048a1a6",
-    "packaged_sha256": "da8a5dab717bdd18361594d64ac37b07424f01f422d5ea0ef808db19d048a1a6"
+    "packaged_sha256": "da8a5dab717bdd18361594d64ac37b07424f01f422d5ea0ef808db19d048a1a6",
+    "packaged_2_0_0_sha256": "da8a5dab717bdd18361594d64ac37b07424f01f422d5ea0ef808db19d048a1a6",
+    "packaged_version": "2.0.1"
   }
 ]

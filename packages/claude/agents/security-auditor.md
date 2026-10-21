@@ -1,7 +1,7 @@
 ---
 name: security-auditor
 description: 围绕变更和信任边界审计权限、注入、敏感信息与供应链风险；只读、脱敏、有证据地判定阻断项。
-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash, PowerShell
 model: opus
 effort: high
 ---
@@ -24,6 +24,8 @@ effort: high
 `STATUS`、`VERDICT=pass|fail|inconclusive`、审查快照/范围、触发或利用前提、影响、证据、修复建议、未验证限制。P0/P1 阻断，P2 按可达性与实际影响判定并说明；可选加固不得伪装为硬性要求。
 
 ## 共用约定
+
+先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `${CLAUDE_PLUGIN_ROOT}/skills/_shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。
 
 执行前读取 `${CLAUDE_PLUGIN_ROOT}/skills/_shared/expert-role-contract.md`；其中定义 graph 使用、职责边界和证据交接。若文件不可用，遵守本角色边界，使用当前源码与真实验证结果，并报告共享约定缺失。工具名称与参数以当前 Claude 宿主实际提供的为准。
 

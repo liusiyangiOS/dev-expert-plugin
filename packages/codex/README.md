@@ -2,6 +2,8 @@
 
 独立的 8 个角色、4 个 skill，以及本端模型解析程序和执行规则。不需要安装 Claude，也不读取 Claude 配置。`skills/_shared` 只在 Codex 包内部使用。
 
+同一包适配 Windows 原生、WSL2、macOS、Linux。核心规则相同，执行前按 `skills/_shared/expert-platform.md` 选择实际 shell、用户目录和 Python。当前宿主实测平台为 macOS，其他平台见 [验证范围](../../docs/platforms.md)。
+
 ## 前提
 
 - 支持独立 `~/.codex/agents/*.toml` 自定义角色、技能发现和子 Agent 委派的 Codex。旧版只有 `config_file` 注册方式时先升级客户端；本包不重写旧版全局配置。
@@ -20,6 +22,16 @@ python3 packages/codex/install.py install --dry-run
 python3 packages/codex/install.py install
 python3 packages/codex/install.py check
 ```
+
+原生 Windows PowerShell（先确认 `py -3` 是 Python 3.11+；否则使用已安装的 `python`）：
+
+```powershell
+py -3 -X utf8 .\packages\codex\install.py install --dry-run
+py -3 -X utf8 .\packages\codex\install.py install
+py -3 -X utf8 .\packages\codex\install.py check
+```
+
+下文更新/卸载也可以使用该前缀。安装器使用 UTF-8 和跨平台文件 API，拒绝穿过软链接、硬链接文件及 Windows 目录联接；不会自动要求管理员权限。Windows 主目录通常是 `USERPROFILE`，WSL 则使用 Linux 主目录。
 
 也可以只复制 `packages/codex` 整个目录到另一台机器，在该目录运行 `python3 install.py install`，不需要仓库其他目录。
 
@@ -91,8 +103,10 @@ $post-coding-pipeline 检查当前改动，不修改、不提交。
 解析器用当前账号模型目录，72 小时失效后重新核验；不会自动升级 CLI。查看缓存状态（缺失/过期时非零退出是预期结果）：
 
 ```bash
-python3 ~/.agents/skills/_shared/expert_models.py status
+python3 "$HOME/.agents/skills/_shared/expert_models.py" status
 ```
+
+Windows PowerShell 使用 `py -3 -X utf8 "$env:USERPROFILE\.agents\skills\_shared\expert_models.py" status`。将 `~` 原样传给 Python 不能保证路径会展开；实际调用应按平台约定先解析绝对路径。
 
 模型缓存：`~/.cache/codex-expert-workflows/expert-model-cache.json`。历史失败：默认 `~/.local/state/expert-workflows/<repo-key>/known-failures.json`。任务 ledger 默认在项目 `.expert-workflow/<task-id>/state.md`。这些是运行数据，不进本仓库、不与 Claude 同步。
 
@@ -110,5 +124,7 @@ python3 packages/codex/install.py uninstall --home "$test_user_dir"
 ```
 
 `--home` 是模拟用户目录，不会切换当前 Codex 会话。自动化宿主发现测试见仓库 `tests/host_smoke.py`；完整测试结果见 [验证报告](../../docs/validation.md)。
+
+以上 `mktemp` 是 POSIX 示例；PowerShell 隔离演练见 [平台说明](../../docs/platforms.md#windows-原生-codex)。不要在 PowerShell 直接粘贴 Bash 的变量赋值语法。
 
 安装与宿主发现通过，只说明文件、角色、技能可加载；真实任务仍依赖当前账号、模型、项目测试和权限。缺少必要委派能力时如实阻断，不能用主 Agent 自审代替独立验收。

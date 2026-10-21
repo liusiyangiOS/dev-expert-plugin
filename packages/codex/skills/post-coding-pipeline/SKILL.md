@@ -9,6 +9,8 @@ description: 对当前改动执行提交前构建、测试和独立安全/质量
 
 “检查并修复”采用入口迁移，不嵌套调用：先结束失败的检查阶段，携带快照、证据及累计计数转到 bugfix-pipeline，遵守最多三次生产尝试、两轮 QA 自修和一次审查回修；仅覆盖缺口等非业务缺陷可由主理人给 QA 明确写入范围，累计最多两轮。已有计数保留，超限不重新开始。修复完成后回到本质量门，仅补跑失效或未执行的关卡；再次失败不得通过入口往返重置预算。
 
+先读取 [平台与路径约定](../_shared/expert-platform.md)，按实际 Agent 环境解析路径、解释器与 shell；质量规则保持不变。
+
 ## 启动
 
 完整读取 [执行约定](../_shared/expert-workflow-contract.md)、[角色与 graph 约定](../_shared/expert-role-contract.md)；创建专家前完整读取并执行 [模型策略](../_shared/expert-model-policy.md) 并实际传参。

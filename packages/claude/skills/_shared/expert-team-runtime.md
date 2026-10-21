@@ -4,6 +4,8 @@
 
 ## 入口与执行
 
+先读取 [平台与路径约定](expert-platform.md)，识别实际 Agent 环境与可用 Bash/PowerShell 工具；路径按当前安装者与插件根解析，不使用作者目录。
+
 | 用户目的 | 本地技能 |
 | --- | --- |
 | 需求开发、专家团协作 | [expert-team-review](../expert-team-review/SKILL.md) |

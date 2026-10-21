@@ -2,6 +2,8 @@
 
 独立 Claude 插件：8 个专家、4 个完整 skill、Claude 自己的规则与动态模型策略。不读取 Codex 或 `.agents`，不链接另一端文件。
 
+同一包适配 Windows 原生、WSL、macOS、Linux。所有入口与角色会读取本端 `skills/_shared/expert-platform.md`，选择宿主实际提供的 Bash/PowerShell 并解析插件资源。当前实测宿主平台是 macOS，Windows 原生验收尚待执行。
+
 ## 安装
 
 需要支持插件、技能、自定义 Agent 与角色 `effort` 的 Claude Code。插件安装、模型权限和项目工具是不同前提；账号必须能调用要求的模型/强度。
@@ -23,6 +25,17 @@ claude plugin details dev-expert-plugin@dev-expert
 
 首次安装后新开会话。市场名称和插件名称沿用旧版；市场来源指向 `packages/claude`，不会安装 Codex 包。
 
+Windows PowerShell 在仓库根可运行：
+
+```powershell
+$expertRepo = (Get-Location).Path
+claude plugin marketplace add "$expertRepo"
+claude plugin install dev-expert-plugin@dev-expert
+claude plugin details dev-expert-plugin@dev-expert
+```
+
+角色允许 `Bash`、`PowerShell` 两种 shell 工具，实际只调用当前宿主提供的工具，不改变只读职责或权限。旧客户端若缺 PowerShell，可使用已配置的 Git Bash；没有必要命令工具时报告缺口，不跳验证。官方 [Windows 设置](https://code.claude.com/docs/en/setup#set-up-on-windows) 与 [工具说明](https://code.claude.com/docs/en/tools-reference#powershell-tool) 列出实际前提。
+
 只拿到本端目录也可直接加载，不需要另一端或仓库根文件：
 
 ```bash
@@ -30,6 +43,8 @@ claude --plugin-dir /absolute/path/to/claude-package
 ```
 
 这是当次会话加载，后续会话仍需带该参数，不等同永久安装。不要同时加载市场版与相同的 `--plugin-dir` 版本。
+
+Windows 在仓库根也可用 `claude --plugin-dir ".\packages\claude"`。必须保留整个插件结构；不能把角色和技能拆出来放到普通用户目录后继续依赖 `${CLAUDE_PLUGIN_ROOT}`。详细路径与安装边界见 [平台说明](../../docs/platforms.md)。
 
 ## 使用
 
@@ -65,7 +80,7 @@ claude --plugin-dir /absolute/path/to/claude-package
 
 仓库的旧三条 JS workflow 已由四个 skill 替代；当前插件没有活动 `workflows/`。旧脚本历史可在 Git 中查询，运行不依赖旧脚本。
 
-若此前手工复制到 `~/.claude/agents`、`~/.claude/skills`、`~/.claude/workflows`，插件安装不会自动删除它们。先备份，再由用户明确停用同名旧入口，避免双重调度；保留无关角色和技能。迁移完成使用带 `dev-expert-plugin:` 前缀的新命令。本仓库脚本不会修改正在使用的个人配置。
+若此前手工复制到 `~/.claude/agents`、`~/.claude/skills`、`~/.claude/workflows`，插件安装不会自动删除它们。先备份，再由用户明确停用同名旧入口，避免双重调度；保留无关角色和技能。迁移完成使用带 `dev-expert-plugin:` 前缀的新命令。插件管理命令不替你迁移个人文件；下面的个人目录安装器只管理本团清单中的源码文件。
 
 ## 路径、模型和状态
 
@@ -93,3 +108,13 @@ claude plugin validate packages/claude
 以上在仓库根执行。清单校验之外还要实际安装、检查组件清单。隔离演练由 `tests/host_smoke.py` 完成：创建空用户目录和独立 Claude 配置，只在子进程使用它，不读取个人登录或写入真实安装。结果见 [验证报告](../../docs/validation.md)。
 
 参考：[市场与子目录插件](https://code.claude.com/docs/en/plugin-marketplaces)、[插件路径与组件](https://code.claude.com/docs/en/plugins-reference)、[模型配置](https://code.claude.com/docs/en/model-config)。
+
+## 个人目录安装与同步（插件方式的替代方案）
+
+需要 Python 3.11+。在仓库根执行 `python3 packages/claude/install.py install --dry-run`，确认预览后执行 `install`、`check`；Windows 将解释器换为 `py -3 -X utf8`。只拿到本端目录时可在该目录调用 `python3 install.py`，无需 Codex 包。
+
+目标为 `~/.claude/agents` 和 `~/.claude/skills`（含 `_shared`）；使用 `/quick-fix` 等不带插件前缀的入口。安装器将插件资源路径与命名空间转换为个人形式，质量/模型/路由规则仍来自同一 Claude 源码。不要同时启用插件版和个人版；非默认 `CLAUDE_CONFIG_DIR` 不支持个人自动安装。
+
+更新前执行 `check` 检查本机与包的差异，审阅后再 `install`、`check`。未登记同名文件或被改动的文件默认拒绝覆盖；`install --replace` 会备份后接管。卸载用 `uninstall`，不会清除缓存/状态或无关配置。清单在 `~/.claude/expert-team/install-manifest.json`，备份在相邻 `backups` 目录。
+
+手动安装先用 `install --home <空暂存目录>` 生成个人形式，再复制其中 `.claude/agents` 和 `.claude/skills` 的本团普通文件；后续用安装器接管才能做受管校验。不要将个人形式直接覆盖回插件源码；在本端包维护，安装器负责路径转换。具体见[根 README 的维护说明](../../README.md#手动复制与本机同步)。

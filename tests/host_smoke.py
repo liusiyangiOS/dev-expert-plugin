@@ -5,11 +5,11 @@ import http.server
 import json
 import os
 from pathlib import Path
-import shutil
 import subprocess
 import sys
 import tempfile
 import threading
+from support import isolated_environment, native_cli
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLES = {"planner", "dev", "qa", "debugger", "researcher",
@@ -18,8 +18,10 @@ SKILLS = {"expert-team-review", "bugfix-pipeline", "post-coding-pipeline", "quic
 
 
 def call(args, env, cwd, *, success=True):
+    if args[0] in ("codex", "claude"):
+        args = [native_cli(args[0]), *args[1:]]
     p = subprocess.run(args, env=env, cwd=cwd, capture_output=True, text=True,
-                       timeout=45, stdin=subprocess.DEVNULL)
+                       encoding="utf-8", timeout=45, stdin=subprocess.DEVNULL)
     if success and p.returncode:
         raise RuntimeError(f"{args[:3]}: {p.stdout}\n{p.stderr}")
     return p
@@ -28,8 +30,7 @@ def call(args, env, cwd, *, success=True):
 def claude_probe(base):
     user = base / "claude-user"
     user.mkdir()
-    env = {"PATH": os.environ["PATH"], "HOME": str(user),
-           "CLAUDE_CONFIG_DIR": str(user / ".claude")}
+    env = isolated_environment(user)
     print(call(["claude", "--version"], env, user).stdout.strip())
     for path in (ROOT, ROOT / "packages/claude"):
         call(["claude", "plugin", "validate", str(path)], env, user)
@@ -57,16 +58,19 @@ def claude_probe(base):
 def codex_probe(base, wire):
     user = base / "codex-user"
     user.mkdir()
-    env = {"PATH": os.environ["PATH"], "HOME": str(user), "CODEX_HOME": str(user / ".codex")}
+    env = isolated_environment(user)
     print(call(["codex", "--version"], env, user).stdout.strip())
     install = [sys.executable, str(ROOT / "packages/codex/install.py")]
     call([*install, "install", "--home", str(user)], env, user)
     call([*install, "check", "--home", str(user)], env, user)
     prompt = call(["codex", "--no-daemon", "debug", "prompt-input"], env, user)
-    json.loads(prompt.stdout)
+    decoded = json.loads(prompt.stdout)
+    # JSON wire escapes Windows backslashes; compare decoded text, not raw JSON.
+    visible = "\n".join(part.get("text", "") for item in decoded
+                        for part in item.get("content", [])).replace("\\", "/")
     for skill in SKILLS:
-        assert f"- {skill}:" in prompt.stdout and f"/{skill}/SKILL.md" in prompt.stdout, skill
-    assert str(user / ".agents/skills") in prompt.stdout
+        assert f"- {skill}:" in visible and f"/{skill}/SKILL.md" in visible, skill
+    assert (user / ".agents/skills").as_posix() in visible
     print("PASS Codex：真实宿主上下文发现 4 个技能")
     if wire:
         # Capture native tool schemas on loopback. The fixture deliberately
@@ -118,8 +122,7 @@ def main():
         for name, fn in (("claude", claude_probe), ("codex", codex_probe)):
             if args.platform not in ("both", name):
                 continue
-            if not shutil.which(name):
-                raise SystemExit(f"缺少 {name} CLI；宿主验证未运行")
+            native_cli(name)
             fn(base, args.codex_wire) if name == "codex" else fn(base)
 
 

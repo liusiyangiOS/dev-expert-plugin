@@ -2,6 +2,7 @@
 
 import copy
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -149,10 +150,28 @@ class ModelPolicyTests(unittest.TestCase):
                 "--cache", str(cache_path), "--catalog", str(catalog_path),
                 "--flagship", "unavailable-model",
                 "--source", "https://learn.chatgpt.com/docs/models",
-            ], capture_output=True, text=True, check=False)
+            ], capture_output=True, text=True, encoding="utf-8", check=False)
             self.assertEqual(result.returncode, 2)
             self.assertEqual(json.loads(result.stdout)["status"], "blocked")
             self.assertEqual(cache_path.read_bytes(), before)
+
+    def test_cli_unicode_paths_and_output_are_utf8(self):
+        with tempfile.TemporaryDirectory(prefix="expert-unicode-") as directory:
+            root = Path(directory) / "模型 测试"
+            root.mkdir()
+            cache_path, catalog_path = root / "缓存.json", root / "目录.json"
+            policy.atomic_save(cache_path, self.cache)
+            policy.atomic_save(catalog_path, self.catalog)
+            env = dict(os.environ)
+            env["PYTHONIOENCODING"] = "cp1252"
+            result = subprocess.run([
+                sys.executable, str(Path(policy.__file__)), "resolve", "--mode", "疯狂",
+                "--cache", str(cache_path), "--catalog", str(catalog_path),
+            ], env=env, capture_output=True, encoding="utf-8")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            data = json.loads(result.stdout)
+            self.assertEqual(data["mode"], "疯狂")
+            self.assertEqual(data["agents"]["qa"]["model"], "gpt-5.6-terra")
 
 
 if __name__ == "__main__":
