@@ -78,3 +78,18 @@ git diff --check
 - 仓库和现用源码路径审计通过。Windows/Linux 尚未实机执行；GitHub Actions 矩阵尚未运行，不能承诺所有环境无问题。
 
 README 已写明手动复制、个人/插件安装差异、检查与更新命令，以及模型按调用检查与 72 小时核验，非后台实时更新。未提交或推送。
+
+## 2026-10-21：Windows Codex 安装入口实机修复
+
+根因：Windows 上没有可用的 `py` 启动器或 PATH 中的 Python，PowerShell 在执行 `install.py` 前就报 `CommandNotFoundException`。新增仅用于 Windows 的 `packages/codex/install.ps1`，查找真实 Python 3.11+，支持命令、注册表、用户常见安装目录及显式 `EXPERT_PYTHON`；保持 UTF-8、原始参数和退出码。缺依赖时给出官方安装指引，不自动下载。原 `install.py`、macOS/POSIX 安装命令、全部角色与技能内容未修改。
+
+Windows 实机结果（与上方历史 macOS 记录分开）：
+
+- Python 3.12.14：分发/个人安装/跨平台及新增 Windows 入口测试 30 项全部通过，无跳过；模型策略测试 19 项全部通过。
+- 本机最终 Python 3.14.8 环境：同一组分发与 Windows 入口测试 30 项再次全部通过，无跳过。
+- 新增 5 项测试覆盖无 `py` 的 PATH 回退、显式解释器、中文/空格目录独立安装生命周期、错误退出码及 `--replace` 备份、不可用/旧版本候选回退和探测环境恢复。
+- Windows Codex CLI 0.163.0-alpha.10.2：`tests/host_smoke.py --platform codex --codex-wire` 通过，真实上下文发现 4 个技能，本地回环捕获的委派工具包含全部 8 个角色；无远程模型推理。
+- 本机使用官方 Python 3.14.8 Windows 便携包（核对官网 SHA-256）完成默认用户安装：`check` 验证 28 个文件完整，`config.toml`、`AGENTS.md` 的安装前后哈希/存在状态一致，已安装路径审计通过。便携运行时加入用户 PATH；新进程生效，安装入口也可直接发现其目录。
+- 最初受限执行环境的 PowerShell 子进程遇到临时目录权限错误，改在正常用户环境重跑后全部通过。官方完整 Python 安装器在本机遇到 MSI 缓存路径错误，因此本机依赖使用官方便携包；未改动系统 MSI 服务。
+
+本记录仅证明 Windows 安装、文件保护和宿主发现；不代表完整模型业务流程、Windows Claude 宿主、WSL/Linux 实机或远端 CI 已验收。远端 CI 结果以本次提交对应的 GitHub Actions 运行记录为准。

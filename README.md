@@ -4,7 +4,7 @@
 
 **同仓库、独立发行。** `packages/claude` 与 `packages/codex` 各自包含完整角色、规则和模型策略；运行时互不读取，不使用软链接或硬链接，不共享模型缓存。安装一端不要求安装另一端。
 
-同一套包提供 Windows 原生、WSL2、macOS、Linux 的平台适配，不另建 Windows 专家团。**跨平台处理已加入；目前实际宿主验收在 macOS 完成，Windows/Linux CI 与实机结果尚未取得。** [平台安装与验证范围](docs/platforms.md) 说明手动复制位置、PowerShell 命令、路径与工具前提。
+同一套包提供 Windows 原生、WSL2、macOS、Linux 的平台适配，不另建 Windows 专家团。**跨平台处理已加入；macOS 已完成宿主验收，Windows Codex 已通过安装回归及 4 技能/8 角色宿主发现验证；远端 CI、Windows Claude 宿主与 Linux 实机仍未验收。** [平台安装与验证范围](docs/platforms.md) 说明手动复制位置、PowerShell 命令、路径与工具前提。
 
 ## 选择平台并安装
 
@@ -71,12 +71,12 @@ python3 packages/codex/install.py install
 python3 packages/codex/install.py check
 ```
 
-Windows PowerShell 在仓库根使用已核验的 Python 3.11+（没有 `py` 时改用实际 `python` 命令）：
+Windows PowerShell 在仓库根使用专用入口（自动发现 Python 3.11+，不依赖 `py`；缺少 Python 时见 [Windows 安装说明](packages/codex/README.md#安装)）：
 
 ```powershell
-py -3 -X utf8 .\packages\codex\install.py install --dry-run
-py -3 -X utf8 .\packages\codex\install.py install
-py -3 -X utf8 .\packages\codex\install.py check
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
 ```
 
 更新/卸载使用同一解释器调用 `install`/`uninstall`。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`_shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。

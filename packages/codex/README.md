@@ -2,7 +2,7 @@
 
 独立的 8 个角色、4 个 skill，以及本端模型解析程序和执行规则。不需要安装 Claude，也不读取 Claude 配置。`skills/_shared` 只在 Codex 包内部使用。
 
-同一包适配 Windows 原生、WSL2、macOS、Linux。核心规则相同，执行前按 `skills/_shared/expert-platform.md` 选择实际 shell、用户目录和 Python。当前宿主实测平台为 macOS，其他平台见 [验证范围](../../docs/platforms.md)。
+同一包适配 Windows 原生、WSL2、macOS、Linux。核心规则相同，执行前按 `skills/_shared/expert-platform.md` 选择实际 shell、用户目录和 Python。macOS 与原生 Windows 已完成安装及宿主发现验证，具体范围见 [验证范围](../../docs/platforms.md)。
 
 ## 前提
 
@@ -23,15 +23,26 @@ python3 packages/codex/install.py install
 python3 packages/codex/install.py check
 ```
 
-原生 Windows PowerShell（先确认 `py -3` 是 Python 3.11+；否则使用已安装的 `python`）：
+原生 Windows PowerShell 使用专用入口，不要求安装 `py` 启动器：
 
 ```powershell
-py -3 -X utf8 .\packages\codex\install.py install --dry-run
-py -3 -X utf8 .\packages\codex\install.py install
-py -3 -X utf8 .\packages\codex\install.py check
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
 ```
 
-下文更新/卸载也可以使用该前缀。安装器使用 UTF-8 和跨平台文件 API，拒绝穿过软链接、硬链接文件及 Windows 目录联接；不会自动要求管理员权限。Windows 主目录通常是 `USERPROFILE`，WSL 则使用 Linux 主目录。
+入口自动检查 `py`、`python`、`python3`、Windows 注册表与用户常见安装目录中的 Python，要求 3.11+；跳过商店占位命令。Python 已安装但终端 PATH 尚未刷新时也可发现。所有参数及退出码传给原有 `install.py`，支持 `--home`、`--dry-run`、`--replace`。`-ExecutionPolicy Bypass` 仅影响本次 PowerShell 子进程，不修改系统执行策略。
+
+如果提示找不到 Python，从 [Python 官方 Windows 下载页](https://www.python.org/downloads/windows/) 安装 Python 3.11+；传统安装器勾选 **Add python.exe to PATH**，之后新开 PowerShell。自定义/便携安装也可指定完整路径（无须附加 `-3` 等参数）：
+
+```powershell
+$env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe' # 替换为实际存在的路径
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
+```
+
+入口不自动下载 Python。下文更新/卸载在 Windows 使用同一 `install.ps1` 前缀，将末尾命令替换为 `install`、`check` 或 `uninstall` 即可。仅复制 Codex 包时，Windows 在包目录使用 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 install`。
+
+安装器使用 UTF-8 和跨平台文件 API，拒绝穿过软链接、硬链接文件及 Windows 目录联接；不会自动要求管理员权限。Windows 主目录通常是 `USERPROFILE`，WSL 则使用 Linux 主目录。
 
 也可以只复制 `packages/codex` 整个目录到另一台机器，在该目录运行 `python3 install.py install`，不需要仓库其他目录。
 

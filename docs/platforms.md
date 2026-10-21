@@ -21,20 +21,16 @@ Claude 也支持个人目录安装：执行 `packages/claude/install.py install`
 
 ## Windows 原生 Codex
 
-在 PowerShell 中，先确认 Python 3.11+ 与实际解释器：
+Windows 使用 `packages/codex/install.ps1`，无需固定依赖 `py`。入口尝试 `py`、`python`、`python3` 及注册表、用户常见安装目录中的 Python，实际执行版本检查（3.11+），跳过商店占位命令。未找到时不会写入专家团文件，会提示安装 Python。
 
-```powershell
-py -3 -c "import sys; print(sys.executable); print(sys.version)"
-```
-
-没有 `py` 时用实际安装的 `python` 或 `python3` 做同样检查，再替换下列命令前缀。不要把 Windows 应用执行别名的商店提示当作 Python 已可用。
+如果未安装 Python，从 [官方 Windows 下载页](https://www.python.org/downloads/windows/) 安装 Python 3.11+；传统安装器勾选 **Add python.exe to PATH**，完成后新开终端。自定义安装可设置 `$env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe'`（替换为真实解释器路径）。入口本身不下载依赖，也不修改系统执行策略。
 
 在仓库根目录执行：
 
 ```powershell
-py -3 -X utf8 .\packages\codex\install.py install --dry-run
-py -3 -X utf8 .\packages\codex\install.py install
-py -3 -X utf8 .\packages\codex\install.py check
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
 ```
 
 有同名文件默认停止；确认替换时加 `--replace`，保存原文件备份。更新代码后重复 `install`、`check`；卸载用 `uninstall`。新开 Codex 会话后使用 `$quick-fix` 等技能调用语法。
@@ -45,9 +41,9 @@ py -3 -X utf8 .\packages\codex\install.py check
 
 ```powershell
 $expertTestHome = Join-Path ([IO.Path]::GetTempPath()) ("expert-test-" + [guid]::NewGuid())
-py -3 -X utf8 .\packages\codex\install.py install --home "$expertTestHome"
-py -3 -X utf8 .\packages\codex\install.py check --home "$expertTestHome"
-py -3 -X utf8 .\packages\codex\install.py uninstall --home "$expertTestHome"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --home "$expertTestHome"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check --home "$expertTestHome"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 uninstall --home "$expertTestHome"
 ```
 
 它不会切换现用 Codex 的用户目录。非默认 `CODEX_HOME` 布局仍不在本安装器支持范围内。
@@ -114,4 +110,4 @@ POSIX 用 `python3`。`--installed` 只扫描本团角色和技能源码，不�
 
 本次修改在 macOS 执行了回归和宿主安装测试，新增中文/空格路径、显式 UTF-8、Windows 路径形式、子进程目录隔离与目录联接拒绝逻辑测试。真实 Windows 目录联接测试在非 Windows 明确标 skipped，不能计为已通过。
 
-`tests/host_smoke.py` 两端宿主测试需要实际 CLI；Windows 的测试程序选择原生 `.exe`，不拼接 `.cmd`/`.ps1` 包装器参数。此要求只针对宿主测试器，不影响通过支持的宿主方式使用专家团。测试只使用临时 HOME/USERPROFILE、应用数据和配置目录，不继承模型凭据；原生 Windows 实机宿主验收尚待执行，见 [验证记录](validation.md)。
+`tests/host_smoke.py` 两端宿主测试需要实际 CLI；Windows 的测试程序选择原生 `.exe`，不拼接 `.cmd`/`.ps1` 包装器参数。此要求只针对宿主测试器，不影响通过支持的宿主方式使用专家团。测试只使用临时 HOME/USERPROFILE、应用数据和配置目录，不继承模型凭据；原生 Windows Codex 已通过 4 技能/8 角色的隔离宿主发现验证；Windows Claude 宿主与完整线上业务流程仍待验收，见 [验证记录](validation.md)。
