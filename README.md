@@ -61,7 +61,7 @@ py -3 -X utf8 .\packages\claude\install.py check
 
 ### Codex
 
-要求 Python 3.11+，以及支持独立 TOML 自定义角色、技能发现和子 Agent 的 Codex。
+要求支持独立 TOML 自定义角色、技能发现和子 Agent 的 Codex。macOS/Linux 需预装 Python 3.11+；Windows 一键脚本会在缺少 Python 时自动准备。
 
 ```bash
 git clone https://github.com/liusiyangiOS/dev-expert-plugin.git
@@ -77,7 +77,7 @@ python3 packages/codex/install.py check
 .\install-windows.cmd
 ```
 
-脚本自动查找 Python 3.11+，依次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留结果供查看，按任意键关闭。更新仓库后再次运行同一脚本即可。仅安装 Codex 专家团，不覆盖本机定制文件；缺少 Python 时会给出安装提示，不自动下载依赖。高级检查、替换和卸载见 [Windows 安装说明](packages/codex/README.md#安装)。
+脚本自动查找 Python 3.11+，依次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留结果供查看，按任意键关闭。更新仓库后再次运行同一脚本即可。仅安装 Codex 专家团，不覆盖本机定制文件；缺少 Python 时自动从 python.org 下载官方 Python 3.14.8 便携版，校验 SHA-256 后安装到当前用户目录，无需管理员权限或另输命令。首次下载需要联网；不会修改系统 Python、PATH 或 Git 账号。高级检查、替换和卸载见 [Windows 安装说明](packages/codex/README.md#安装)。
 
 macOS/Linux 沿用上方 Python 命令。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`_shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。
 

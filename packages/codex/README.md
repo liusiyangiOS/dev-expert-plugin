@@ -7,7 +7,7 @@
 ## 前提
 
 - 支持独立 `~/.codex/agents/*.toml` 自定义角色、技能发现和子 Agent 委派的 Codex。旧版只有 `config_file` 注册方式时先升级客户端；本包不重写旧版全局配置。
-- Python 3.11+，用于安装、模型目录解析及本地测试。
+- Python 3.11+，用于安装、模型目录解析及本地测试。Windows 一键脚本可自动准备；macOS/Linux 需自行安装。
 - 当前账号可调用策略需要的模型和推理强度；安装成功不代表账号拥有所有模型。
 - 项目自身的构建、测试工具按项目需要准备。
 
@@ -33,14 +33,16 @@ python3 packages/codex/install.py check
 
 入口自动检查 `py`、`python`、`python3`、Windows 注册表与用户常见安装目录中的 Python，要求 3.11+；跳过商店占位命令。Python 已安装但终端 PATH 尚未刷新时也可发现。`install.ps1` 不带参数时执行上述三步；显式传参时仍调用原有 `install.py`，支持 `--home`、`--dry-run`、`--replace`，保留其退出码。根目录 `.cmd` 仅用于默认安装；高级命令直接使用 `install.ps1`。`-ExecutionPolicy Bypass` 仅影响本次 PowerShell 子进程，不修改系统执行策略。
 
-如果提示找不到 Python，从 [Python 官方 Windows 下载页](https://www.python.org/downloads/windows/) 安装 Python 3.11+；传统安装器勾选 **Add python.exe to PATH**，之后新开 PowerShell。自定义/便携安装也可指定完整路径（无须附加 `-3` 等参数）：
+**没有 Python 也可直接双击。** 无参数入口未找到可用 Python 时，从 [python.org 官方发布页](https://www.python.org/downloads/release/python-3148/) 下载固定版本 3.14.8 的 Windows 便携包，按 x64/x86/ARM64 选择架构，并验证脚本中固定的 SHA-256，验证成功后才解压运行。运行时保存在 `%LOCALAPPDATA%\Programs\Python\ExpertTeam-3.14.8-<架构>`，无需管理员权限，不修改注册表、PATH 或系统 Python；后续运行自动发现并复用。该运行时供专家团使用，包含标准库，不包含 pip/完整 Python 开发环境。
+
+首次自动下载需要能访问 python.org。下载、校验或运行失败会停止且清理本次临时文件，可检查网络后重新双击。`check`、`uninstall`、`install --dry-run` 等显式参数操作不会自动下载；先运行一键脚本准备依赖。指定了 `EXPERT_PYTHON` 时严格使用该路径，路径无效会报错，不另行下载。离线或自定义安装可从 [Python 官方 Windows 下载页](https://www.python.org/downloads/windows/) 准备 Python 3.11+，再指定完整路径（无须附加 `-3` 等参数）：
 
 ```powershell
 $env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe' # 替换为实际存在的路径
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
 ```
 
-入口不自动下载 Python。仅复制完整 `packages/codex` 包时，Windows 在包目录执行 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1`，同样一次完成安装及校验。
+仅复制完整 `packages/codex` 包时，Windows 在包目录执行 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1`，同样一次完成安装及校验。
 
 高级操作（在仓库根目录执行；同名文件确认需要备份替换后才使用 `--replace`）：
 
@@ -92,6 +94,8 @@ python3 packages/codex/install.py check
 python3 packages/codex/install.py uninstall --dry-run
 python3 packages/codex/install.py uninstall
 ```
+
+Windows 自动准备的 Python 运行时不属于专家团文件清单，卸载后保留；确认不再需要时可手动删除上述专用运行时目录。需要在终端单独调用该 Python 时使用该目录下 `python.exe` 的完整路径。
 
 卸载只处理安装清单列出的文件；不删除其他技能、模型缓存、历史诊断和备份。被修改的文件默认保留并阻止卸载，明确备份后卸载可加 `--replace`。空目录可以保留。
 

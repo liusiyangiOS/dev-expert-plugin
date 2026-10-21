@@ -160,5 +160,117 @@ class WindowsLauncherTests(unittest.TestCase):
                 self.assertNotIn("Installation verified.", result.stdout)
 
 
+    def bootstrap_harness(self, body, *, download_error=False, bad_hash=False):
+        import hashlib
+        import zipfile
+        archive = self.base / "fixture.zip"
+        with zipfile.ZipFile(archive, "w") as zipped:
+            zipped.writestr("python.exe", "fixture: never execute")
+        self.env["EXPERT_TEST_LAUNCHER"] = str(LAUNCHER)
+        self.env["EXPERT_TEST_ARCHIVE"] = str(archive)
+        self.env["EXPERT_TEST_HASH"] = "0" * 64 if bad_hash else hashlib.sha256(archive.read_bytes()).hexdigest()
+        self.env.pop("EXPERT_PYTHON", None)
+        harness = self.base / "bootstrap.ps1"
+        download = "throw 'network unavailable'" if download_error else "Copy-Item -LiteralPath $env:EXPERT_TEST_ARCHIVE -Destination $Destination"
+        harness.write_text("\n".join([
+            "$ErrorActionPreference = 'Stop'",
+            ". $env:EXPERT_TEST_LAUNCHER",
+            "function Get-ExpertPythonCandidates {}",
+            "function Get-ExpertPythonRelease {",
+            "  [pscustomobject]@{Name='ExpertTeam-test'; Url='https://www.python.org/test.zip'; Sha256=$env:EXPERT_TEST_HASH}",
+            "}",
+            "function Save-ExpertPythonArchive($Url, $Destination) {",
+            "  $script:downloads += 1",
+            "  " + download,
+            "}",
+            "function Test-ExpertRuntime($Executable) {",
+            "  $script:probes += 1",
+            "  return (Test-Path -LiteralPath $Executable -PathType Leaf)",
+            "}",
+            "$script:downloads = 0; $script:probes = 0",
+            body,
+        ]), encoding="ascii")
+        return harness
+
+    def test_bootstrap_publishes_verified_runtime_and_reuses_it(self):
+        harness = self.bootstrap_harness("""
+$first = Find-ExpertPython -Bootstrap
+if (-not (Test-Path -LiteralPath $first)) { exit 2 }
+$again = Find-ExpertPython -Bootstrap
+if ($first -ne $again -or $script:downloads -ne 1) { exit 3 }
+""")
+        self.run_launcher(launcher=harness)
+        root = Path(self.env["LOCALAPPDATA"]) / "Programs/Python"
+        self.assertEqual([p.name for p in root.iterdir()], ["ExpertTeam-test"])
+
+    def test_bootstrap_download_and_hash_failures_do_not_execute_or_publish(self):
+        for download_error, bad_hash in ((True, False), (False, True)):
+            with self.subTest(download_error=download_error, bad_hash=bad_hash):
+                harness = self.bootstrap_harness("""
+try { Find-ExpertPython -Bootstrap; exit 2 } catch { Write-Host $_.Exception.Message }
+if ($script:downloads -ne 1 -or $script:probes -ne 0) { exit 3 }
+""", download_error=download_error, bad_hash=bad_hash)
+                result = self.run_launcher(launcher=harness)
+                self.assertIn("network unavailable" if download_error else "SHA-256 mismatch", result.stdout)
+                root = Path(self.env["LOCALAPPDATA"]) / "Programs/Python"
+                self.assertEqual(list(root.iterdir()), [])
+                self.assertFalse((self.home / ".agents").exists())
+
+    def test_bootstrap_opt_in_and_explicit_python_are_respected(self):
+        harness = self.bootstrap_harness("""
+try { Find-ExpertPython; exit 2 } catch { }
+$env:EXPERT_PYTHON = 'missing.exe'
+try { Find-ExpertPython -Bootstrap; exit 3 } catch { }
+if ($script:downloads -ne 0) { exit 4 }
+""")
+        self.run_launcher(launcher=harness)
+        self.assertFalse((Path(self.env["LOCALAPPDATA"]) / "Programs/Python").exists())
+
+    def test_bootstrap_preserves_broken_existing_runtime(self):
+        harness = self.bootstrap_harness(r"""
+$target = Join-Path $env:LOCALAPPDATA 'Programs\Python\ExpertTeam-test'
+$null = New-Item -ItemType Directory -Path $target -Force
+Set-Content -LiteralPath (Join-Path $target 'keep.txt') -Value 'custom'
+try { Find-ExpertPython -Bootstrap; exit 2 } catch { Write-Host $_.Exception.Message }
+if ($script:downloads -ne 0) { exit 3 }
+""")
+        result = self.run_launcher(launcher=harness)
+        self.assertIn("Existing runtime is unusable", result.stdout)
+        root = Path(self.env["LOCALAPPDATA"]) / "Programs/Python/ExpertTeam-test"
+        self.assertEqual((root / "keep.txt").read_text().strip(), "custom")
+
+    def test_bootstrap_rejects_junction_parent(self):
+        harness = self.bootstrap_harness(r"""
+$outside = Join-Path $env:LOCALAPPDATA 'outside'
+$parent = Join-Path $env:LOCALAPPDATA 'Programs'
+$null = New-Item -ItemType Directory -Path $outside, $parent
+$null = New-Item -ItemType Junction -Path (Join-Path $parent 'Python') -Target $outside
+try { Find-ExpertPython -Bootstrap; exit 2 } catch { Write-Host $_.Exception.Message }
+if ($script:downloads -ne 0) { exit 3 }
+if (@(Get-ChildItem -LiteralPath $outside).Count -ne 0) { exit 4 }
+""")
+        result = self.run_launcher(launcher=harness)
+        self.assertIn("reparse point", result.stdout)
+
+    def test_bootstrap_architecture_selection(self):
+        harness = self.base / "architectures.ps1"
+        self.env["EXPERT_TEST_LAUNCHER"] = str(LAUNCHER)
+        harness.write_text("""
+. $env:EXPERT_TEST_LAUNCHER
+$env:PROCESSOR_ARCHITEW6432 = ''
+foreach ($pair in @(@('AMD64', 'amd64'), @('x86', 'win32'), @('ARM64', 'arm64'))) {
+    $env:PROCESSOR_ARCHITECTURE = $pair[0]
+    $release = Get-ExpertPythonRelease
+    if ($release.Url -notlike ('https://www.python.org/*/python-3.14.8-embed-' + $pair[1] + '.zip')) { exit 2 }
+    if ($release.Sha256 -notmatch '^[0-9a-f]{64}$') { exit 3 }
+}
+$env:PROCESSOR_ARCHITEW6432 = 'AMD64'
+if ((Get-ExpertPythonRelease).Name -notlike '*amd64') { exit 4 }
+$env:PROCESSOR_ARCHITEW6432 = 'unknown'
+try { Get-ExpertPythonRelease; exit 5 } catch { }
+""", encoding="ascii")
+        self.run_launcher(launcher=harness)
+
+
 if __name__ == "__main__":
     unittest.main()

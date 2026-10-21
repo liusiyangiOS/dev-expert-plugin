@@ -21,9 +21,9 @@ Claude 也支持个人目录安装：执行 `packages/claude/install.py install`
 
 ## Windows 原生 Codex
 
-Windows 双击仓库根目录的 `install-windows.cmd`，内部调用 `packages/codex/install.ps1`，无需固定依赖 `py`。入口尝试 `py`、`python`、`python3` 及注册表、用户常见安装目录中的 Python，实际执行版本检查（3.11+），跳过商店占位命令。未找到时不会写入专家团文件，会提示安装 Python。
+Windows 双击仓库根目录的 `install-windows.cmd`，内部调用 `packages/codex/install.ps1`，无需固定依赖 `py`。入口尝试 `py`、`python`、`python3` 及注册表、用户常见安装目录中的 Python，实际执行版本检查（3.11+），跳过商店占位命令。未找到时，无参数入口会自动下载官方 Python 3.14.8 便携包，验证固定 SHA-256 后安装到当前用户的 `%LOCALAPPDATA%\Programs\Python\ExpertTeam-3.14.8-<架构>`，然后继续安装专家团。支持 x64/x86/ARM64 下载选择。
 
-如果未安装 Python，从 [官方 Windows 下载页](https://www.python.org/downloads/windows/) 安装 Python 3.11+；传统安装器勾选 **Add python.exe to PATH**，完成后新开终端。自定义安装可设置 `$env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe'`（替换为真实解释器路径）。入口本身不下载依赖，也不修改系统执行策略。
+首次自动下载需要联网；失败后检查网络并重试即可。显式参数命令（包括预览、检查、卸载）不自动下载，可先运行无参数入口或从 [官方 Windows 下载页](https://www.python.org/downloads/windows/) 手动准备 Python 3.11+。自定义安装可设置 `$env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe'`（替换为真实解释器路径）。显式 Python 路径无效时直接报错。自动准备的是包含标准库的专用运行时，不含 pip，不更改 PATH、注册表、系统 Python 或系统执行策略；卸载专家团时保留该运行时。
 
 在仓库根目录执行：
 
