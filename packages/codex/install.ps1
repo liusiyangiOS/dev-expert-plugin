@@ -1,5 +1,5 @@
 # Windows PowerShell 5.1 / PowerShell 7 entry point. Keep this file ASCII.
-# Pass all arguments unchanged to the existing cross-platform installer.
+# Without arguments: preview, install, then verify. Explicit arguments are forwarded.
 function Get-ExpertPythonCandidates {
     if ($env:EXPERT_PYTHON) {
         [pscustomobject]@{ Path = $env:EXPERT_PYTHON; Prefix = @() }
@@ -79,7 +79,21 @@ if ($MyInvocation.InvocationName -eq '.') { return }
 try {
     $expertPython = Find-ExpertPython
     Write-Host "Python: $expertPython"
-    & $expertPython -X utf8 (Join-Path $PSScriptRoot 'install.py') @args
+    $installer = Join-Path $PSScriptRoot 'install.py'
+    if ($args.Count -eq 0) {
+        Write-Host '[1/3] Preview installation'
+        & $expertPython -X utf8 $installer install --dry-run
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        Write-Host '[2/3] Install Codex expert team'
+        & $expertPython -X utf8 $installer install
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        Write-Host '[3/3] Verify installed files'
+        & $expertPython -X utf8 $installer check
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        Write-Host 'Installation verified. Open a new Codex chat to load the expert team.'
+        exit 0
+    }
+    & $expertPython -X utf8 $installer @args
     exit $LASTEXITCODE
 } catch {
     [Console]::Error.WriteLine($_.Exception.Message)

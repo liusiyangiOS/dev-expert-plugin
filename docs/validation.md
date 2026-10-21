@@ -93,3 +93,11 @@ Windows 实机结果（与上方历史 macOS 记录分开）：
 - 最初受限执行环境的 PowerShell 子进程遇到临时目录权限错误，改在正常用户环境重跑后全部通过。官方完整 Python 安装器在本机遇到 MSI 缓存路径错误，因此本机依赖使用官方便携包；未改动系统 MSI 服务。
 
 本记录仅证明 Windows 安装、文件保护和宿主发现；不代表完整模型业务流程、Windows Claude 宿主、WSL/Linux 实机或远端 CI 已验收。远端 CI 结果以本次提交对应的 GitHub Actions 运行记录为准。
+
+## 2026-10-21：Windows 一键安装
+
+仓库根目录新增 `install-windows.cmd`，可双击或执行 `./install-windows.cmd`。它通过相对脚本路径调用 `packages/codex/install.ps1`；不传参数时顺序完成预览、安装、完整性检查，任一步失败立即停止并保留非零退出码。双击后保留窗口输出；自动化可用 `EXPERT_INSTALL_NO_PAUSE=1` 关闭末尾等待。显式 PowerShell 参数调用保持兼容，Python 缺失时保留安装提示，不自动下载依赖。
+
+根 README、Codex README 与平台说明同步改为单脚本安装方式；macOS/POSIX 命令、Python 安装器、角色和技能内容保持不变。`.cmd` 单独固定为 CRLF，不改变其他文件的换行规则。
+
+Windows / Python 3.14.8 验证：分发及平台测试 33 项、模型策略测试 19 项，共 52 项全部通过。新增覆盖一键脚本从其他工作目录启动、中文/空格/`&` 路径、重复安装、依赖失败退出码、已有定制文件保护，以及预览/安装/校验每一步失败后不再执行后续阶段。`git diff --check` 通过。远端 CI 以该提交对应的 GitHub Actions 运行记录为准。

@@ -23,15 +23,15 @@ python3 packages/codex/install.py install
 python3 packages/codex/install.py check
 ```
 
-原生 Windows PowerShell 使用专用入口，不要求安装 `py` 启动器：
+**Windows 推荐双击仓库根目录的 [install-windows.cmd](../../install-windows.cmd)**，或在仓库根目录只运行一条命令（不要求安装 `py` 启动器）：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
+.\install-windows.cmd
 ```
 
-入口自动检查 `py`、`python`、`python3`、Windows 注册表与用户常见安装目录中的 Python，要求 3.11+；跳过商店占位命令。Python 已安装但终端 PATH 尚未刷新时也可发现。所有参数及退出码传给原有 `install.py`，支持 `--home`、`--dry-run`、`--replace`。`-ExecutionPolicy Bypass` 仅影响本次 PowerShell 子进程，不修改系统执行策略。
+脚本依次执行预览、安装和完整性校验；任一步失败立即停止，成功后提示新开 Codex 会话。窗口保留结果，按任意键关闭；更新源码后再次运行即可。请保留完整仓库目录结构，不要只复制这个 `.cmd` 文件。
+
+入口自动检查 `py`、`python`、`python3`、Windows 注册表与用户常见安装目录中的 Python，要求 3.11+；跳过商店占位命令。Python 已安装但终端 PATH 尚未刷新时也可发现。`install.ps1` 不带参数时执行上述三步；显式传参时仍调用原有 `install.py`，支持 `--home`、`--dry-run`、`--replace`，保留其退出码。根目录 `.cmd` 仅用于默认安装；高级命令直接使用 `install.ps1`。`-ExecutionPolicy Bypass` 仅影响本次 PowerShell 子进程，不修改系统执行策略。
 
 如果提示找不到 Python，从 [Python 官方 Windows 下载页](https://www.python.org/downloads/windows/) 安装 Python 3.11+；传统安装器勾选 **Add python.exe to PATH**，之后新开 PowerShell。自定义/便携安装也可指定完整路径（无须附加 `-3` 等参数）：
 
@@ -40,7 +40,17 @@ $env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe' # 替换为实际存在的路�
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
 ```
 
-入口不自动下载 Python。下文更新/卸载在 Windows 使用同一 `install.ps1` 前缀，将末尾命令替换为 `install`、`check` 或 `uninstall` 即可。仅复制 Codex 包时，Windows 在包目录使用 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 install`。
+入口不自动下载 Python。仅复制完整 `packages/codex` 包时，Windows 在包目录执行 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1`，同样一次完成安装及校验。
+
+高级操作（在仓库根目录执行；同名文件确认需要备份替换后才使用 `--replace`）：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --replace
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 uninstall
+```
+
+自动化环境可设置 `EXPERT_INSTALL_NO_PAUSE=1` 跳过 `.cmd` 末尾等待，退出码仍反映安装结果。
 
 安装器使用 UTF-8 和跨平台文件 API，拒绝穿过软链接、硬链接文件及 Windows 目录联接；不会自动要求管理员权限。Windows 主目录通常是 `USERPROFILE`，WSL 则使用 Linux 主目录。
 

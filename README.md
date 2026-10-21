@@ -71,15 +71,15 @@ python3 packages/codex/install.py install
 python3 packages/codex/install.py check
 ```
 
-Windows PowerShell 在仓库根使用专用入口（自动发现 Python 3.11+，不依赖 `py`；缺少 Python 时见 [Windows 安装说明](packages/codex/README.md#安装)）：
+**Windows 只需运行一个脚本：下载并解压完整仓库，双击根目录的 [install-windows.cmd](install-windows.cmd)。** 已经克隆仓库的用户也可在 PowerShell 中执行一条命令：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
+.\install-windows.cmd
 ```
 
-更新/卸载使用同一解释器调用 `install`/`uninstall`。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`_shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。
+脚本自动查找 Python 3.11+，依次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留结果供查看，按任意键关闭。更新仓库后再次运行同一脚本即可。仅安装 Codex 专家团，不覆盖本机定制文件；缺少 Python 时会给出安装提示，不自动下载依赖。高级检查、替换和卸载见 [Windows 安装说明](packages/codex/README.md#安装)。
+
+macOS/Linux 沿用上方 Python 命令。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`_shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。
 
 上述 GitHub 命令需要新版已发布；当前本地审阅直接在本 checkout 执行 Python 命令即可。角色安装至 `~/.codex/agents`，技能及本端规则安装至 `~/.agents/skills`；Claude 包不读取这个目录。不改全局配置、凭据、无关文件，也不创建链接。有同名文件时先停止，确认需要替换后加 `--replace`，安装器会保存原文件备份。
 

@@ -94,6 +94,71 @@ class WindowsLauncherTests(unittest.TestCase):
         result = self.run_launcher("install", "--dry-run")
         self.assertIn(sys.executable, result.stdout)
 
+    def test_one_click_cmd_from_another_directory_and_unicode_checkout(self):
+        checkout = self.base / "源码 & 空格"
+        package = checkout / "packages/codex"
+        shutil.copytree(ROOT / "packages/codex", package,
+                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+        entry = checkout / "install-windows.cmd"
+        shutil.copyfile(ROOT / "install-windows.cmd", entry)
+        self.env["EXPERT_INSTALL_NO_PAUSE"] = "1"
+
+        def run_entry(ok=True):
+            result = subprocess.run(
+                f'"{os.environ["COMSPEC"]}" /d /s /c ""{entry}""',
+                cwd=self.base, env=self.env, capture_output=True,
+                encoding="utf-8", errors="replace", timeout=60)
+            self.assertEqual(result.returncode == 0, ok, result.stdout + result.stderr)
+            return result
+
+        for _ in range(2):  # Install, then update through exactly the same entry.
+            result = run_entry()
+            self.assertIn("[1/3]", result.stdout)
+            self.assertIn("[2/3]", result.stdout)
+            self.assertIn("[3/3]", result.stdout)
+            self.assertIn("Installation verified.", result.stdout)
+        self.run_launcher("check")
+        manifest = self.home / ".codex/expert-team/install-manifest.json"
+        before = manifest.read_bytes()
+        self.env["EXPERT_PYTHON"] = str(self.base / "missing.exe")
+        result = run_entry(ok=False)
+        self.assertNotIn("Installation verified.", result.stdout)
+        self.assertEqual(manifest.read_bytes(), before)
+
+    def test_default_flow_preserves_conflicting_files(self):
+        target = self.home / ".codex/agents/dev.toml"
+        target.parent.mkdir(parents=True)
+        target.write_text("custom role", encoding="utf-8")
+        result = self.run_launcher(ok=False)
+        self.assertEqual(target.read_text(encoding="utf-8"), "custom role")
+        self.assertNotIn("[2/3]", result.stdout)
+        self.assertNotIn("Installation verified.", result.stdout)
+        self.assertFalse((self.home / ".codex/expert-team/install-manifest.json").exists())
+
+    def test_default_flow_stops_and_propagates_each_stage_failure(self):
+        package = self.base / "failure-fixture"
+        package.mkdir()
+        shutil.copyfile(LAUNCHER, package / "install.ps1")
+        (package / "install.py").write_text(
+            "import os, pathlib, sys\n"
+            "stage = 'preview' if '--dry-run' in sys.argv else sys.argv[1]\n"
+            "with pathlib.Path(os.environ['EXPERT_STEP_LOG']).open('a') as f:\n"
+            "    f.write(stage + '\\n')\n"
+            "sys.exit(7 if stage == os.environ['EXPERT_FAIL_STAGE'] else 0)\n",
+            encoding="ascii")
+        for failure, expected in (
+                ("preview", ["preview"]),
+                ("install", ["preview", "install"]),
+                ("check", ["preview", "install", "check"])):
+            with self.subTest(failure=failure):
+                log = self.base / (failure + ".log")
+                self.env["EXPERT_STEP_LOG"] = str(log)
+                self.env["EXPERT_FAIL_STAGE"] = failure
+                result = self.run_launcher(launcher=package / "install.ps1", ok=False)
+                self.assertEqual(result.returncode, 7)
+                self.assertEqual(log.read_text().splitlines(), expected)
+                self.assertNotIn("Installation verified.", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -21,19 +21,17 @@ Claude 也支持个人目录安装：执行 `packages/claude/install.py install`
 
 ## Windows 原生 Codex
 
-Windows 使用 `packages/codex/install.ps1`，无需固定依赖 `py`。入口尝试 `py`、`python`、`python3` 及注册表、用户常见安装目录中的 Python，实际执行版本检查（3.11+），跳过商店占位命令。未找到时不会写入专家团文件，会提示安装 Python。
+Windows 双击仓库根目录的 `install-windows.cmd`，内部调用 `packages/codex/install.ps1`，无需固定依赖 `py`。入口尝试 `py`、`python`、`python3` 及注册表、用户常见安装目录中的 Python，实际执行版本检查（3.11+），跳过商店占位命令。未找到时不会写入专家团文件，会提示安装 Python。
 
 如果未安装 Python，从 [官方 Windows 下载页](https://www.python.org/downloads/windows/) 安装 Python 3.11+；传统安装器勾选 **Add python.exe to PATH**，完成后新开终端。自定义安装可设置 `$env:EXPERT_PYTHON = 'D:\Tools\Python\python.exe'`（替换为真实解释器路径）。入口本身不下载依赖，也不修改系统执行策略。
 
 在仓库根目录执行：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install --dry-run
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 install
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install.ps1 check
+.\install-windows.cmd
 ```
 
-有同名文件默认停止；确认替换时加 `--replace`，保存原文件备份。更新代码后重复 `install`、`check`；卸载用 `uninstall`。新开 Codex 会话后使用 `$quick-fix` 等技能调用语法。
+该脚本一次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留输出，按任意键关闭。更新代码后再次运行同一脚本即可。有同名文件默认停止；高级备份替换和卸载使用 `install.ps1 install --replace` / `install.ps1 uninstall`，完整命令见 [Codex 安装说明](../packages/codex/README.md#安装)。新开 Codex 会话后使用 `$quick-fix` 等技能调用语法。
 
 无写入预览通过仍不等于完整业务流程已通过。安装器不调用模型，不更改全局配置或账号。
 
