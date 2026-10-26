@@ -13,9 +13,9 @@ import unittest
 from support import isolated_environment
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = {"expert-team-review", "bugfix-pipeline", "post-coding-pipeline", "quick-fix"}
-ROLES = {"planner", "dev", "qa", "debugger", "researcher",
-         "code-reviewer", "security-auditor", "team-lead"}
+SKILLS = {"dev-expert-team-review", "dev-bugfix-pipeline", "dev-post-coding-pipeline", "dev-quick-fix"}
+ROLES = {"dev-planner", "dev-developer", "dev-qa", "dev-debugger", "dev-researcher",
+         "dev-code-reviewer", "dev-security-auditor", "dev-team-lead"}
 INSTALL = ROOT / "packages/codex/install.py"
 
 
@@ -106,7 +106,7 @@ class InstallTests(unittest.TestCase):
 
     def test_lifecycle_preserves_unrelated_data(self):
         for name in (".codex/config.toml", ".claude/settings.json",
-                     ".agents/skills/_shared/unrelated.md",
+                     ".agents/skills/dev-shared/unrelated.md",
                      ".cache/codex-expert-workflows/expert-model-cache.json"):
             p = self.home / name
             p.parent.mkdir(parents=True, exist_ok=True)
@@ -121,14 +121,14 @@ class InstallTests(unittest.TestCase):
             if p.is_file() and p.name in ("config.toml", "settings.json", "unrelated.md",
                                          "expert-model-cache.json"):
                 self.assertEqual(p.read_text(encoding="utf-8"), "sentinel")
-        self.assertFalse((self.home / ".codex/agents/dev.toml").exists())
+        self.assertFalse((self.home / ".codex/agents/dev-developer.toml").exists())
 
     def test_conflict_is_preflighted_and_backed_up(self):
-        p = self.home / ".agents/skills/quick-fix/SKILL.md"
+        p = self.home / ".agents/skills/dev-quick-fix/SKILL.md"
         p.parent.mkdir(parents=True)
         p.write_text("original customization", encoding="utf-8")
         self.run_install(ok=False)
-        self.assertFalse((self.home / ".codex/agents/dev.toml").exists())
+        self.assertFalse((self.home / ".codex/agents/dev-developer.toml").exists())
         self.run_install("install", "--replace")
         saved = list((self.home / ".codex/expert-team/backups").rglob("SKILL.md"))
         self.assertEqual(len(saved), 1)
@@ -156,7 +156,7 @@ class InstallTests(unittest.TestCase):
     def test_hardlinks_are_never_overwritten(self):
         outside = self.home / "outside"
         outside.mkdir()
-        p = self.home / ".codex/agents/dev.toml"
+        p = self.home / ".codex/agents/dev-developer.toml"
         p.parent.mkdir(parents=True, exist_ok=True)
         original = outside / "original"
         original.write_text("untouched", encoding="utf-8")
@@ -184,7 +184,7 @@ class InstallTests(unittest.TestCase):
         manifest = self.home / ".codex/expert-team/install-manifest.json"
         manifest.write_text(json.dumps({"files": {"../../outside": "hash"}}), encoding="utf-8")
         self.run_install("uninstall", "--replace", ok=False)
-        self.assertTrue((self.home / ".codex/agents/dev.toml").exists())
+        self.assertTrue((self.home / ".codex/agents/dev-developer.toml").exists())
 
     def test_write_failure_rolls_back_payload_and_state(self):
         spec = importlib.util.spec_from_file_location("installer", INSTALL)
@@ -221,13 +221,13 @@ class InstallTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
 
         apply("install")
-        src = package / "agents/dev.toml"
+        src = package / "agents/dev-developer.toml"
         original = src.read_bytes()
         src.write_bytes(original + b"\n# package update fixture\n")
         apply("install")
         apply("check")
-        self.assertEqual((target / ".codex/agents/dev.toml").read_bytes(), src.read_bytes())
-        backups = list((target / ".codex/expert-team/backups").rglob("dev.toml"))
+        self.assertEqual((target / ".codex/agents/dev-developer.toml").read_bytes(), src.read_bytes())
+        backups = list((target / ".codex/expert-team/backups").rglob("dev-developer.toml"))
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_bytes(), original)
         self.assertFalse((target / ".claude").exists())
@@ -246,7 +246,7 @@ class InstallTests(unittest.TestCase):
                 env=env, capture_output=True, encoding="utf-8")
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertNotIn("\ufffd", result.stdout)
-        self.assertFalse((target / ".codex/agents/dev.toml").exists())
+        self.assertFalse((target / ".codex/agents/dev-developer.toml").exists())
 
     def test_unicode_manifest_is_read_as_utf8(self):
         self.run_install()

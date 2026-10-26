@@ -12,9 +12,9 @@ import threading
 from support import isolated_environment, native_cli
 
 ROOT = Path(__file__).resolve().parents[1]
-ROLES = {"planner", "dev", "qa", "debugger", "researcher",
-         "code-reviewer", "security-auditor", "team-lead"}
-SKILLS = {"expert-team-review", "bugfix-pipeline", "post-coding-pipeline", "quick-fix"}
+ROLES = {"dev-planner", "dev-developer", "dev-qa", "dev-debugger", "dev-researcher",
+         "dev-code-reviewer", "dev-security-auditor", "dev-team-lead"}
+SKILLS = {"dev-expert-team-review", "dev-bugfix-pipeline", "dev-post-coding-pipeline", "dev-quick-fix"}
 
 
 def call(args, env, cwd, *, success=True):

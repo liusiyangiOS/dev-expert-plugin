@@ -15,7 +15,7 @@
 
 ### Claude Code
 
-本地准备版本为 2.0.1；发布到 GitHub 后，在 Claude Code 中执行：
+本地准备版本为 3.0.0（名称不兼容升级，见 [命名迁移](docs/namespace-migration.md)）；发布到 GitHub 后，在 Claude Code 中执行：
 
 ```text
 /plugin marketplace add liusiyangiOS/dev-expert-plugin
@@ -25,10 +25,10 @@
 新开会话后使用：
 
 ```text
-/dev-expert-plugin:expert-team-review 实现这个需求：目标…约束…验收标准…
-/dev-expert-plugin:bugfix-pipeline 修复这个问题：复现…预期…实际…
-/dev-expert-plugin:quick-fix 修复这个局部问题，先判断快修准入条件。
-/dev-expert-plugin:post-coding-pipeline 检查当前改动，不修改、不提交。
+/dev-expert-plugin:dev-expert-team-review 实现这个需求：目标…约束…验收标准…
+/dev-expert-plugin:dev-bugfix-pipeline 修复这个问题：复现…预期…实际…
+/dev-expert-plugin:dev-quick-fix 修复这个局部问题，先判断快修准入条件。
+/dev-expert-plugin:dev-post-coding-pipeline 检查当前改动，不修改、不提交。
 ```
 
 更新：`/plugin marketplace update dev-expert`，然后 `/plugin update dev-expert-plugin@dev-expert`，再新开会话。
@@ -55,7 +55,7 @@ py -3 -X utf8 .\packages\claude\install.py install
 py -3 -X utf8 .\packages\claude\install.py check
 ```
 
-安装器把同一 Claude 包转换为个人目录形式：角色、四个技能、全部 `_shared` 规则都在当前用户 `.claude` 下；只转换资源路径和调用命名空间，质量规则保留。使用 `/expert-team-review`、`/bugfix-pipeline`、`/quick-fix`、`/post-coding-pipeline`，不带插件前缀。不同时启用本团插件和个人安装。非默认 `CLAUDE_CONFIG_DIR` 暂不支持此安装方式。
+安装器把同一 Claude 包转换为个人目录形式：角色、四个技能、全部 `dev-shared` 规则都在当前用户 `.claude` 下；只转换资源路径和调用命名空间，质量规则保留。使用 `/dev-expert-team-review`、`/dev-bugfix-pipeline`、`/dev-quick-fix`、`/dev-post-coding-pipeline`，不带插件前缀。不同时启用本团插件和个人安装。非默认 `CLAUDE_CONFIG_DIR` 暂不支持此安装方式。
 
 同名文件或本机改动默认阻止覆盖；审阅后使用 `install --replace` 才备份替换。更新重复 `install`、`check`，卸载用 `uninstall`；缓存、历史失败和全局设置不变。
 
@@ -79,17 +79,17 @@ python3 packages/codex/install.py check
 
 脚本自动查找 Python 3.11+，依次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留结果供查看，按任意键关闭。更新仓库后再次运行同一脚本即可。仅安装 Codex 专家团，不覆盖本机定制文件；缺少 Python 时自动从 python.org 下载官方 Python 3.14.8 便携版，校验 SHA-256 后安装到当前用户目录，无需管理员权限或另输命令。首次下载需要联网；不会修改系统 Python、PATH 或 Git 账号。高级检查、替换和卸载见 [Windows 安装说明](packages/codex/README.md#安装)。
 
-macOS/Linux 沿用上方 Python 命令。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`_shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。
+macOS/Linux 沿用上方 Python 命令。路径按当前用户解析；Windows 的角色在 `%USERPROFILE%\.codex\agents`，技能在 `%USERPROFILE%\.agents\skills`，`dev-shared` 在该 `skills` 内。中文/空格路径按完整参数处理，不写死作者目录。
 
 上述 GitHub 命令需要新版已发布；当前本地审阅直接在本 checkout 执行 Python 命令即可。角色安装至 `~/.codex/agents`，技能及本端规则安装至 `~/.agents/skills`；Claude 包不读取这个目录。不改全局配置、凭据、无关文件，也不创建链接。有同名文件时先停止，确认需要替换后加 `--replace`，安装器会保存原文件备份。
 
 新开 Codex 会话，在聊天中输入：
 
 ```text
-$expert-team-review 实现这个需求：目标…约束…验收标准…
-$bugfix-pipeline 修复这个问题：复现…预期…实际…
-$quick-fix 修复这个局部问题，先准入，不满足就升级。
-$post-coding-pipeline 检查当前改动，不修改、不提交。
+$dev-expert-team-review 实现这个需求：目标…约束…验收标准…
+$dev-bugfix-pipeline 修复这个问题：复现…预期…实际…
+$dev-quick-fix 修复这个局部问题，先准入，不满足就升级。
+$dev-post-coding-pipeline 检查当前改动，不修改、不提交。
 ```
 
 更新：在 checkout 执行 `git pull --ff-only`，然后再次 `install`、`check`。卸载：`python3 packages/codex/install.py uninstall`。被用户修改的受管文件默认不会覆盖/删除。非默认 `CODEX_HOME` 暂不支持自动安装，详见本端文档。
@@ -100,7 +100,7 @@ $post-coding-pipeline 检查当前改动，不修改、不提交。
 
 | 安装方式 | 复制内容与目标 |
 | --- | --- |
-| Codex | `packages/codex/agents` 内文件 → `~/.codex/agents`；`packages/codex/skills` 内所有目录（含 `_shared`、references 等）→ `~/.agents/skills` |
+| Codex | `packages/codex/agents` 内文件 → `~/.codex/agents`；`packages/codex/skills` 内所有目录（含 `dev-shared`、references 等）→ `~/.agents/skills` |
 | Claude 插件 | 保留完整 `packages/claude`，通过市场或 `claude --plugin-dir <包目录>` 加载；不要直接摊平到个人目录 |
 | Claude 个人目录 | 先用本端安装器 `install --home <空的暂存目录>` 生成，再将暂存目录中 `.claude/agents` 和 `.claude/skills` 的本团文件复制到用户 `.claude` 下；不要复制备份或其他个人数据 |
 
@@ -127,21 +127,21 @@ python3 packages/claude/install.py check
 
 | Skill | 用途 |
 | --- | --- |
-| `expert-team-review` | 需求研发；按风险选择调研/计划/实现/测试/审查节点，以任务依赖图编排 |
-| `bugfix-pipeline` | QA 复现、根因定位、最小修复、回归与审查；支持偶发问题受控诊断 |
-| `quick-fix` | 有根因证据、影响局部、低风险且可可靠验证的条件式快修 |
-| `post-coding-pipeline` | 构建、测试、独立审查和最终快照核对；默认只检查，不自动修复或提交 |
+| `dev-expert-team-review` | 需求研发；按风险选择调研/计划/实现/测试/审查节点，以任务依赖图编排 |
+| `dev-bugfix-pipeline` | QA 复现、根因定位、最小修复、回归与审查；支持偶发问题受控诊断 |
+| `dev-quick-fix` | 有根因证据、影响局部、低风险且可可靠验证的条件式快修 |
+| `dev-post-coding-pipeline` | 构建、测试、独立审查和最终快照核对；默认只检查，不自动修复或提交 |
 
 | 角色 | 职责 |
 | --- | --- |
-| `team-lead` | 唯一调度、任务图、责任分配、状态和证据验收，不代写业务实现 |
-| `researcher` | 技术与方案调研，区分事实和推断 |
-| `planner` | 方案、依赖、契约、风险与验收映射 |
-| `dev` | 在指定范围实现和修复，保留回归保护 |
-| `debugger` | 复现与根因诊断，不以猜测代替因果证据 |
-| `qa` | 按需求独立验收、影响矩阵和失败归属；仅获分配时改测试 |
-| `code-reviewer` | 审符合性、正确性与质量，只读审查 |
-| `security-auditor` | 按实际风险检查信任边界、敏感数据、执行与依赖安全 |
+| `dev-team-lead` | 唯一调度、任务图、责任分配、状态和证据验收，不代写业务实现 |
+| `dev-researcher` | 技术与方案调研，区分事实和推断 |
+| `dev-planner` | 方案、依赖、契约、风险与验收映射 |
+| `dev-developer` | 在指定范围实现和修复，保留回归保护 |
+| `dev-debugger` | 复现与根因诊断，不以猜测代替因果证据 |
+| `dev-qa` | 按需求独立验收、影响矩阵和失败归属；仅获分配时改测试 |
+| `dev-code-reviewer` | 审符合性、正确性与质量，只读审查 |
+| `dev-security-auditor` | 按实际风险检查信任边界、敏感数据、执行与依赖安全 |
 
 ### 保留的质量规则
 
@@ -189,6 +189,6 @@ docs/                           # 迁移记录、能力对照和验证结果
 tests/                          # 安装边界、引用、宿主加载验证
 ```
 
-各端 `_shared` 仅表示本端内部共用。可一起维护功能要求，也可分别修改模型适配；运行时不能引用另一包。发布前同时核对 [能力对照与来源](docs/migration.md)、[验证报告](docs/validation.md)。只同步明确的源码清单，绝不复制整个个人配置目录、账号模型缓存、认证文件、会话、日志或历史失败数据。
+各端 `dev-shared` 仅表示本端内部共用。可一起维护功能要求，也可分别修改模型适配；运行时不能引用另一包。发布前同时核对 [能力对照与来源](docs/migration.md)、[验证报告](docs/validation.md)。只同步明确的源码清单，绝不复制整个个人配置目录、账号模型缓存、认证文件、会话、日志或历史失败数据。
 
 当前仓库未附许可证；本次整理不替维护者作出新的授权选择。正式对外发布前应补充选定许可证。本地安装/校验完成不代表已提交、推送或发布。

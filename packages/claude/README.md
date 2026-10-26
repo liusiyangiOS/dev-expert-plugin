@@ -2,7 +2,7 @@
 
 独立 Claude 插件：8 个专家、4 个完整 skill、Claude 自己的规则与动态模型策略。不读取 Codex 或 `.agents`，不链接另一端文件。
 
-同一包适配 Windows 原生、WSL、macOS、Linux。所有入口与角色会读取本端 `skills/_shared/expert-platform.md`，选择宿主实际提供的 Bash/PowerShell 并解析插件资源。当前实测宿主平台是 macOS，Windows 原生验收尚待执行。
+同一包适配 Windows 原生、WSL、macOS、Linux。所有入口与角色会读取本端 `skills/dev-shared/expert-platform.md`，选择宿主实际提供的 Bash/PowerShell 并解析插件资源。当前实测宿主平台是 macOS，Windows 原生验收尚待执行。
 
 ## 安装
 
@@ -51,13 +51,13 @@ Windows 在仓库根也可用 `claude --plugin-dir ".\packages\claude"`。必须
 插件技能使用命名空间：
 
 ```text
-/dev-expert-plugin:expert-team-review 实现需求：背景…目标…约束…验收…
-/dev-expert-plugin:bugfix-pipeline 修复缺陷：复现…预期…实际…日志…
-/dev-expert-plugin:quick-fix 处理这个局部问题，先准入，不满足就升级。
-/dev-expert-plugin:post-coding-pipeline 只检查当前改动，不修改、不提交。
+/dev-expert-plugin:dev-expert-team-review 实现需求：背景…目标…约束…验收…
+/dev-expert-plugin:dev-bugfix-pipeline 修复缺陷：复现…预期…实际…日志…
+/dev-expert-plugin:dev-quick-fix 处理这个局部问题，先准入，不满足就升级。
+/dev-expert-plugin:dev-post-coding-pipeline 只检查当前改动，不修改、不提交。
 ```
 
-单独角色请指定插件来源，例如“使用 dev-expert-plugin 的 code-reviewer 审查当前 diff，不修改代码”。调度者按宿主实际角色列表选择 `dev-expert-plugin:<角色>`，避免误用用户目录的旧同名角色。
+单独角色请指定插件来源，例如“使用 dev-expert-plugin 的 dev-code-reviewer 审查当前 diff，不修改代码”。调度者按宿主实际角色列表选择 `dev-expert-plugin:<角色>`，避免误用用户目录的旧同名角色。
 
 快速修复主动/自动调用均先准入；首次失败、复杂或不确定即升级且禁止同一问题回切。完整流程只允许简化符合条件的局部实现，原必要验证、独立 QA/review 和累计预算保留。post-coding 默认只读，不因找到简单问题自动获取修复授权。
 
@@ -86,7 +86,7 @@ Windows 在仓库根也可用 `claude --plugin-dir ".\packages\claude"`。必须
 
 运行规则从当前 `${CLAUDE_PLUGIN_ROOT}` 下读取，附属 Markdown 的相对路径按所在文件解析。绝不从个人旧技能或另一平台读取缺失规则。模型策略中的角色路径也指向本插件，安装路径变化不影响规则定位。
 
-默认 `qa/researcher` 为 `sonnet`，其余为 `opus`；researcher 强度 `medium`，其余 `high`。用户明确要求优先，模型别名要结合实际提供方与调用证据核验，不能仅凭别名宣称全球最新。疯狂模式仅为需要的角色核验当前最强通用开发模型，不静默降低其他约束。
+默认 `dev-qa/dev-researcher` 为 `sonnet`，其余为 `opus`；dev-researcher 强度 `medium`，其余 `high`。用户明确要求优先，模型别名要结合实际提供方与调用证据核验，不能仅凭别名宣称全球最新。疯狂模式仅为需要的角色核验当前最强通用开发模型，不静默降低其他约束。
 
 默认/疯狂模式分别保存核验时间与相关配置指纹，72 小时后重新核验；一次模式刷新不能替另一模式续期。缓存只保存脱敏证据：
 
@@ -113,7 +113,7 @@ claude plugin validate packages/claude
 
 需要 Python 3.11+。在仓库根执行 `python3 packages/claude/install.py install --dry-run`，确认预览后执行 `install`、`check`；Windows 将解释器换为 `py -3 -X utf8`。只拿到本端目录时可在该目录调用 `python3 install.py`，无需 Codex 包。
 
-目标为 `~/.claude/agents` 和 `~/.claude/skills`（含 `_shared`）；使用 `/quick-fix` 等不带插件前缀的入口。安装器将插件资源路径与命名空间转换为个人形式，质量/模型/路由规则仍来自同一 Claude 源码。不要同时启用插件版和个人版；非默认 `CLAUDE_CONFIG_DIR` 不支持个人自动安装。
+目标为 `~/.claude/agents` 和 `~/.claude/skills`（含 `dev-shared`）；使用 `/dev-quick-fix` 等不带插件前缀的入口。安装器将插件资源路径与命名空间转换为个人形式，质量/模型/路由规则仍来自同一 Claude 源码。不要同时启用插件版和个人版；非默认 `CLAUDE_CONFIG_DIR` 不支持个人自动安装。
 
 更新前执行 `check` 检查本机与包的差异，审阅后再 `install`、`check`。未登记同名文件或被改动的文件默认拒绝覆盖；`install --replace` 会备份后接管。卸载用 `uninstall`，不会清除缓存/状态或无关配置。清单在 `~/.claude/expert-team/install-manifest.json`，备份在相邻 `backups` 目录。
 

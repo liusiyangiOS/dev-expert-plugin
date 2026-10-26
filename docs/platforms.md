@@ -9,9 +9,9 @@ Codex 可以使用普通文件安装，但必须**完整复制到正确的位置
 | 发行内容 | 原生 Windows 默认位置 |
 | --- | --- |
 | `packages/codex/agents/` 内的 8 个 TOML | `%USERPROFILE%\.codex\agents\` |
-| `packages/codex/skills/` 内所有技能和 `_shared` | `%USERPROFILE%\.agents\skills\` |
+| `packages/codex/skills/` 内所有技能和 `dev-shared` | `%USERPROFILE%\.agents\skills\` |
 
-`_shared` 放在 `skills` 里面，与四个技能目录并列；其中包括模型解析程序、规则和本端平台约定。优先用安装器，避免漏文件或覆盖已有定制。手动复制不产生安装清单，后续 `check`/`uninstall` 不能将这些未经管理的文件当作自己安装的文件；切换安装器时会先检查冲突，需要明确 `--replace` 才备份替换。
+`dev-shared` 放在 `skills` 里面，与四个技能目录并列；其中包括模型解析程序、规则和本端平台约定。优先用安装器，避免漏文件或覆盖已有定制。手动复制不产生安装清单，后续 `check`/`uninstall` 不能将这些未经管理的文件当作自己安装的文件；切换安装器时会先检查冲突，需要明确 `--replace` 才备份替换。
 
 Claude 插件发行包含 `${CLAUDE_PLUGIN_ROOT}` 引用，**应整体按插件安装**，不能把里面的角色/技能单独摊平到个人目录后期待插件变量仍自动解析。保留 `packages/claude/.claude-plugin/plugin.json`、`agents/` 和 `skills/`，使用市场安装或 `--plugin-dir` 加载；两种方式都不读取 Codex 包。
 
@@ -31,7 +31,7 @@ Windows 双击仓库根目录的 `install-windows.cmd`，内部调用 `packages/
 .\install-windows.cmd
 ```
 
-该脚本一次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留输出，按任意键关闭。更新代码后再次运行同一脚本即可。有同名文件默认停止；高级备份替换和卸载使用 `install.ps1 install --replace` / `install.ps1 uninstall`，完整命令见 [Codex 安装说明](../packages/codex/README.md#安装)。新开 Codex 会话后使用 `$quick-fix` 等技能调用语法。
+该脚本一次完成预览、安装和完整性校验；任一步失败立即停止，窗口保留输出，按任意键关闭。更新代码后再次运行同一脚本即可。有同名文件默认停止；高级备份替换和卸载使用 `install.ps1 install --replace` / `install.ps1 uninstall`，完整命令见 [Codex 安装说明](../packages/codex/README.md#安装)。新开 Codex 会话后使用 `$dev-quick-fix` 等技能调用语法。
 
 无写入预览通过仍不等于完整业务流程已通过。安装器不调用模型，不更改全局配置或账号。
 
@@ -72,7 +72,7 @@ claude plugin details dev-expert-plugin@dev-expert
 claude --plugin-dir ".\packages\claude"
 ```
 
-不同时加载同名插件的两个版本。安装后仍用 `/dev-expert-plugin:quick-fix` 等命令。插件安装与运行不要求 Python；个人目录安装器和仓库维护测试要求 Python 3.11+。
+不同时加载同名插件的两个版本。安装后仍用 `/dev-expert-plugin:dev-quick-fix` 等命令。插件安装与运行不要求 Python；个人目录安装器和仓库维护测试要求 Python 3.11+。
 
 官方参考：[Windows 设置](https://code.claude.com/docs/en/setup#set-up-on-windows)、[PowerShell 工具](https://code.claude.com/docs/en/tools-reference#powershell-tool)、[插件资源定位](https://code.claude.com/docs/en/plugins-reference)。
 

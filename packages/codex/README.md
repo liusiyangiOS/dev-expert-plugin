@@ -1,8 +1,8 @@
 # Codex 开发专家团
 
-独立的 8 个角色、4 个 skill，以及本端模型解析程序和执行规则。不需要安装 Claude，也不读取 Claude 配置。`skills/_shared` 只在 Codex 包内部使用。
+独立的 8 个角色、4 个 skill，以及本端模型解析程序和执行规则。不需要安装 Claude，也不读取 Claude 配置。`skills/dev-shared` 只在 Codex 包内部使用。
 
-同一包适配 Windows 原生、WSL2、macOS、Linux。核心规则相同，执行前按 `skills/_shared/expert-platform.md` 选择实际 shell、用户目录和 Python。macOS 与原生 Windows 已完成安装及宿主发现验证，具体范围见 [验证范围](../../docs/platforms.md)。
+同一包适配 Windows 原生、WSL2、macOS、Linux。核心规则相同，执行前按 `skills/dev-shared/expert-platform.md` 选择实际 shell、用户目录和 Python。macOS 与原生 Windows 已完成安装及宿主发现验证，具体范围见 [验证范围](../../docs/platforms.md)。
 
 ## 前提
 
@@ -74,7 +74,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\packages\codex\install
 python3 packages/codex/install.py install --replace
 ```
 
-原文件会备份到安装器打印的目录，修改过的已安装文件也受同样保护。共享 `_shared` 目录中的无关文件不删除。
+原文件会备份到安装器打印的目录，修改过的已安装文件也受同样保护。共享 `dev-shared` 目录中的无关文件不删除。
 
 当前安装器支持默认用户布局。设置了非默认 `CODEX_HOME` 时会拒绝默认安装，避免角色与模型目录落到错误位置。不要为绕过检查直接换环境变量；需要先适配本包路径和模型目录策略，再验证自定义布局。
 
@@ -106,32 +106,32 @@ Windows 自动准备的 Python 运行时不属于专家团文件清单，卸载�
 在 Codex 输入（`$` 是技能调用语法，不是终端命令）：
 
 ```text
-$expert-team-review 实现这个需求：背景…目标…约束…验收标准…
-$bugfix-pipeline 修复这个问题：复现步骤…预期…实际…日志…
-$quick-fix 修复这个局部问题；先判断是否满足快修条件，不满足就升级。
-$post-coding-pipeline 检查当前改动，不修改、不提交。
+$dev-expert-team-review 实现这个需求：背景…目标…约束…验收标准…
+$dev-bugfix-pipeline 修复这个问题：复现步骤…预期…实际…日志…
+$dev-quick-fix 修复这个局部问题；先判断是否满足快修条件，不满足就升级。
+$dev-post-coding-pipeline 检查当前改动，不修改、不提交。
 ```
 
-也可以明确派 `researcher` 调研、派 `code-reviewer` 只读审查。工作流中的专业成员不再自行创建团队。
+也可以明确派 `dev-researcher` 调研、派 `dev-code-reviewer` 只读审查。工作流中的专业成员不再自行创建团队。
 
-快速修复主动调用也必须先准入。复杂、不确定或首次快修失败立即升级，同一问题锁定完整 bugfix。完整 bugfix 中合格局部实现可以快修，但原 QA 复现、debugger 根因门、最终 QA 和必要审查不能省略。
+快速修复主动调用也必须先准入。复杂、不确定或首次快修失败立即升级，同一问题锁定完整 bugfix。完整 bugfix 中合格局部实现可以快修，但原 QA 复现、dev-debugger 根因门、最终 QA 和必要审查不能省略。
 
 ## 模型与持久状态
 
-默认 `qa/researcher` 使用经核验的最新可用 Terra，其他角色使用最新可用 Sol；researcher 为 `medium`，其余为 `high`。疯狂模式的其他角色使用当前经核验的最强通用开发模型。用户明确模型/强度优先，不静默换低档。型号由实际目录和官方资料确认，不随包提供个人账号缓存。
+默认 `dev-qa/dev-researcher` 使用经核验的最新可用 Terra，其他角色使用最新可用 Sol；dev-researcher 为 `medium`，其余为 `high`。疯狂模式的其他角色使用当前经核验的最强通用开发模型。用户明确模型/强度优先，不静默换低档。型号由实际目录和官方资料确认，不随包提供个人账号缓存。
 
 ```text
-用 bugfix-pipeline 的疯狂模式处理这个问题：…
-用 expert-team-review，所有专家使用我指定的模型 <实际可用模型 ID>，强度 high：…
+用 dev-bugfix-pipeline 的疯狂模式处理这个问题：…
+用 dev-expert-team-review，所有专家使用我指定的模型 <实际可用模型 ID>，强度 high：…
 ```
 
 解析器用当前账号模型目录，72 小时失效后重新核验；不会自动升级 CLI。查看缓存状态（缺失/过期时非零退出是预期结果）：
 
 ```bash
-python3 "$HOME/.agents/skills/_shared/expert_models.py" status
+python3 "$HOME/.agents/skills/dev-shared/expert_models.py" status
 ```
 
-Windows PowerShell 使用 `py -3 -X utf8 "$env:USERPROFILE\.agents\skills\_shared\expert_models.py" status`。将 `~` 原样传给 Python 不能保证路径会展开；实际调用应按平台约定先解析绝对路径。
+Windows PowerShell 使用 `py -3 -X utf8 "$env:USERPROFILE\.agents\skills\dev-shared\expert_models.py" status`。将 `~` 原样传给 Python 不能保证路径会展开；实际调用应按平台约定先解析绝对路径。
 
 模型缓存：`~/.cache/codex-expert-workflows/expert-model-cache.json`。历史失败：默认 `~/.local/state/expert-workflows/<repo-key>/known-failures.json`。任务 ledger 默认在项目 `.expert-workflow/<task-id>/state.md`。这些是运行数据，不进本仓库、不与 Claude 同步。
 

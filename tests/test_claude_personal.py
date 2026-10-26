@@ -68,13 +68,13 @@ class ClaudePersonalTests(unittest.TestCase):
             self.assertEqual(dest.stat().st_nlink, 1)
         self.run_install('uninstall')
         self.assertEqual(sentinel.read_text(), 'private cache')
-        self.assertFalse((self.home / '.claude/agents/dev.md').exists())
+        self.assertFalse((self.home / '.claude/agents/dev-developer.md').exists())
         self.assertEqual(list((self.home / '.codex').iterdir()), [])
         self.assertFalse((self.home / '.agents').exists())
 
     def test_local_edits_block_updates_and_are_backed_up(self):
         self.run_install()
-        dest = self.home / '.claude/skills/quick-fix/SKILL.md'
+        dest = self.home / '.claude/skills/dev-quick-fix/SKILL.md'
         dest.write_text('personal change', encoding='utf-8')
         self.run_install('check', ok=False)
         self.run_install(ok=False)
@@ -90,11 +90,11 @@ class ClaudePersonalTests(unittest.TestCase):
         shutil.copytree(INSTALL.parent, package, ignore=shutil.ignore_patterns('__pycache__'))
         local = package / 'install.py'
         self.run_install(source=local)
-        src = package / 'agents/dev.md'
+        src = package / 'agents/dev-developer.md'
         src.write_text(src.read_text(encoding='utf-8') + '\n更新测试\n', encoding='utf-8')
         self.run_install(source=local)
         self.run_install('check', source=local)
-        self.assertIn('更新测试', (self.home / '.claude/agents/dev.md').read_text(encoding='utf-8'))
+        self.assertIn('更新测试', (self.home / '.claude/agents/dev-developer.md').read_text(encoding='utf-8'))
 
     def test_write_failure_rolls_back(self):
         args = installer.argparse.Namespace(home=self.home, explicit_home=True,
@@ -116,11 +116,11 @@ class ClaudePersonalTests(unittest.TestCase):
         self.assertFalse(any(p.is_file() for p in self.home.rglob('*')))
 
     def test_manifest_and_link_boundaries(self):
-        for rel in ('../escape', '.codex/agents/dev.md', '.claude/agents/dev.toml',
-                    '.claude/skills/quick-fix/CON', '.claude/skills/quick-fix/a:b'):
+        for rel in ('../escape', '.codex/agents/dev-developer.md', '.claude/agents/dev-developer.toml',
+                    '.claude/skills/dev-quick-fix/CON', '.claude/skills/dev-quick-fix/a:b'):
             self.assertFalse(installer.safe_relative(rel))
         self.run_install()
-        dest = self.home / '.claude/agents/dev.md'
+        dest = self.home / '.claude/agents/dev-developer.md'
         outside = self.home / 'linked-original'
         outside.write_text('untouched')
         dest.unlink()
@@ -135,11 +135,11 @@ class ClaudePersonalTests(unittest.TestCase):
         self.assertTrue(dest.exists())
 
     def test_future_layout_rules_cannot_be_silently_dropped(self):
-        relative = 'skills/_shared/expert-team-runtime.md'
+        relative = 'skills/dev-shared/expert-team-runtime.md'
         original = (installer.PACKAGE / relative).read_bytes()
         with self.assertRaises(ValueError):
             installer.render_personal(relative, original + '\n新增的必要验收规则\n'.encode())
-        relative = 'skills/_shared/expert-platform.md'
+        relative = 'skills/dev-shared/expert-platform.md'
         original = (installer.PACKAGE / relative).read_text(encoding='utf-8')
         changed = original.replace('不猜测作者或宿主缓存目录。', '不猜测作者或宿主缓存目录。新增约束。')
         with self.assertRaises(ValueError):

@@ -24,7 +24,7 @@ jobs:
       - name: Distribution and isolation tests
         run: python -X utf8 -m unittest discover -s tests -p "test_*.py" -v
       - name: Model policy tests
-        run: python -X utf8 -m unittest discover -s packages/codex/skills/_shared -p "test_expert_models.py" -v
+        run: python -X utf8 -m unittest discover -s packages/codex/skills/dev-shared -p "test_expert_models.py" -v
       - name: Portable path audit
         run: python -X utf8 tests/audit_paths.py
       - name: Whitespace check

@@ -11,10 +11,35 @@ import tempfile
 from datetime import datetime, timezone
 
 PACKAGE = Path(__file__).resolve().parent
-ROLES = {"planner", "dev", "qa", "debugger", "researcher",
-         "code-reviewer", "security-auditor", "team-lead"}
-SKILLS = {"expert-team-review", "bugfix-pipeline", "post-coding-pipeline",
-          "quick-fix", "_shared"}
+ROLES = {"dev-planner", "dev-developer", "dev-qa", "dev-debugger", "dev-researcher",
+         "dev-code-reviewer", "dev-security-auditor", "dev-team-lead"}
+SKILLS = {"dev-expert-team-review", "dev-bugfix-pipeline", "dev-post-coding-pipeline",
+          "dev-quick-fix", "dev-shared"}
+VERSION = "3.0.0"
+PACKAGE_NAME = "dev-expert-claude-personal"
+# Exact file inventory of the independently distributed 2.0.1 package.
+# Legacy names are accepted only in that managed manifest, never as payload.
+LEGACY_PATHS = frozenset({
+    ".claude/agents/code-reviewer.md",
+    ".claude/agents/debugger.md",
+    ".claude/agents/dev.md",
+    ".claude/agents/planner.md",
+    ".claude/agents/qa.md",
+    ".claude/agents/researcher.md",
+    ".claude/agents/security-auditor.md",
+    ".claude/agents/team-lead.md",
+    ".claude/skills/_shared/expert-evaluation-cases.md",
+    ".claude/skills/_shared/expert-known-failures.md",
+    ".claude/skills/_shared/expert-model-policy.md",
+    ".claude/skills/_shared/expert-platform.md",
+    ".claude/skills/_shared/expert-role-contract.md",
+    ".claude/skills/_shared/expert-team-runtime.md",
+    ".claude/skills/_shared/expert-workflow-contract.md",
+    ".claude/skills/bugfix-pipeline/SKILL.md",
+    ".claude/skills/expert-team-review/SKILL.md",
+    ".claude/skills/post-coding-pipeline/SKILL.md",
+    ".claude/skills/quick-fix/SKILL.md",
+})
 
 
 def digest(data):
@@ -39,6 +64,22 @@ def safe_relative(name):
               and p.stem in ROLES and p.suffix == ".md") or
              (len(p.parts) >= 4 and p.parts[:2] == (".claude", "skills")
               and p.parts[2] in SKILLS)))
+
+
+def managed_files(manifest):
+    if not isinstance(manifest, dict):
+        raise ValueError("安装清单必须是 JSON 对象")
+    owned = manifest.get("files")
+    legacy_manifest = (manifest.get("schema_version") == 1
+                       and manifest.get("package") == PACKAGE_NAME
+                       and manifest.get("version") == "2.0.1")
+    if not isinstance(owned, dict) or any(
+            not (safe_relative(name) or (legacy_manifest and name in LEGACY_PATHS))
+            or not isinstance(value, str) or len(value) != 64
+            or any(c not in "0123456789abcdef" for c in value)
+            for name, value in owned.items()):
+        raise ValueError("安装清单损坏或包含越界路径")
+    return owned
 
 
 def check_path(path):
@@ -77,7 +118,7 @@ def atomic_write(path, data):
 def render_personal(relative, data):
     """仅转换安装路径与调用名称；质量、路由、模型和验证正文保持原样。"""
     text = data.decode("utf-8")
-    if relative == "skills/_shared/expert-team-runtime.md":
+    if relative == "skills/dev-shared/expert-team-runtime.md":
         head, sep, layout = text.partition("## 插件发行版的名称与路径")
         # Fail closed if a future edit adds rules to the rewritten layout section.
         if not sep or digest(layout.encode("utf-8")) != "c5d5c7d127c2dc1043b665fb93c18240f8b51af381d89a5e7138f1b94d4154cc":
@@ -89,7 +130,7 @@ def render_personal(relative, data):
 规则与角色均在当前用户 `~/.claude/`，读取前展开为实际绝对路径；相对链接按所在文件目录解析。不要同时启用本团同名插件和个人安装，避免两套入口混用。更新只替换源码，不重置模型缓存、历史诊断或状态。
 """
         text = text.replace("路径按当前安装者与插件根解析", "路径按当前安装者的个人目录解析")
-    if relative == "skills/_shared/expert-platform.md":
+    if relative == "skills/dev-shared/expert-platform.md":
         start = text.index("`${CLAUDE_PLUGIN_ROOT}` 是")
         end = text.index("\n\n读取文件时", start)
         if digest(text[start:end].encode("utf-8")) != "b2c1241f179e622d5045965f023719194b1a685cf65f1565546b608fcdcb5a97":
@@ -116,7 +157,7 @@ def payload():
             files[rel] = render_personal(src.relative_to(PACKAGE).as_posix(), src.read_bytes())
     if len([x for x in files if x.startswith(".claude/agents/")]) != 8:
         raise ValueError("安装包缺少专家角色")
-    for name in SKILLS - {"_shared"}:
+    for name in SKILLS - {"dev-shared"}:
         if f".claude/skills/{name}/SKILL.md" not in files:
             raise ValueError(f"安装包缺少技能：{name}")
     return files
@@ -130,11 +171,7 @@ def run(args):
     state = home / ".claude/expert-team/install-manifest.json"
     check_path(state)
     old = json.loads(state.read_text(encoding="utf-8")) if state.exists() else {"files": {}}
-    if not isinstance(old, dict):
-        raise ValueError("安装清单必须是 JSON 对象")
-    owned = old.get("files")
-    if not isinstance(owned, dict) or any(not safe_relative(n) for n in owned):
-        raise ValueError("安装清单损坏或包含越界路径")
+    owned = managed_files(old)
     desired = payload() if args.command in ("install", "check") else {}
     if args.command == "check":
         errors = []
@@ -175,6 +212,7 @@ def run(args):
         check_path(backup / "manifest.json")
         for name, (before, _) in changes.items():
             if before is not None:
+                check_path(backup / "files" / name)
                 atomic_write(backup / "files" / name, before)
         atomic_write(backup / "manifest.json", json.dumps({
             "command": args.command, "previous_install_manifest": old,
@@ -191,7 +229,7 @@ def run(args):
             applied.append(name)
         if args.command == "install":
             atomic_write(state, json.dumps({
-                "schema_version": 1, "package": "dev-expert-claude-personal", "version": "2.0.1",
+                "schema_version": 1, "package": PACKAGE_NAME, "version": VERSION,
                 "files": {n: digest(b) for n, b in desired.items()}
             }, ensure_ascii=False, indent=2).encode("utf-8"))
         else:

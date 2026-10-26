@@ -1,4 +1,0 @@
-interface:
-  display_name: 专家团队全链路
-  short_description: 按任务依赖图调度专家，结合代码图谱、证据检查点和独立验收完成研发
-  default_prompt: 使用 $expert-team-review 组织专家团队完成这个复杂研发任务。

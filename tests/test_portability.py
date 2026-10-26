@@ -21,19 +21,19 @@ spec.loader.exec_module(installer)
 class PortabilityTests(unittest.TestCase):
     def test_manifest_rejects_windows_escape_and_ambiguous_paths(self):
         for name in (
-            ".agents/skills/quick-fix/../other", ".agents//skills/quick-fix/SKILL.md",
-            ".agents/skills/quick-fix/SKILL.md:stream",
-            ".agents/skills/quick-fix/C:/other",
-            ".agents/skills/quick-fix/NUL.txt",
-            ".agents/skills/quick-fix/CON", ".agents/skills/quick-fix/COM1.txt",
-            ".agents/skills/quick-fix/SKILL.md.", ".agents/skills/quick-fix/SKILL.md ",
-            r".agents\skills\quick-fix\SKILL.md", r"C:\Users\other\SKILL.md",
+            ".agents/skills/dev-quick-fix/../other", ".agents//skills/dev-quick-fix/SKILL.md",
+            ".agents/skills/dev-quick-fix/SKILL.md:stream",
+            ".agents/skills/dev-quick-fix/C:/other",
+            ".agents/skills/dev-quick-fix/NUL.txt",
+            ".agents/skills/dev-quick-fix/CON", ".agents/skills/dev-quick-fix/COM1.txt",
+            ".agents/skills/dev-quick-fix/SKILL.md.", ".agents/skills/dev-quick-fix/SKILL.md ",
+            r".agents\skills\dev-quick-fix\SKILL.md", r"C:\Users\other\SKILL.md",
             r"\\server\share\SKILL.md",
         ):
             with self.subTest(name=name):
                 self.assertFalse(installer.safe_relative(name))
-        self.assertTrue(installer.safe_relative(".agents/skills/quick-fix/SKILL.md"))
-        self.assertTrue(installer.safe_relative(".codex/agents/dev.toml"))
+        self.assertTrue(installer.safe_relative(".agents/skills/dev-quick-fix/SKILL.md"))
+        self.assertTrue(installer.safe_relative(".codex/agents/dev-developer.toml"))
 
     def test_windows_reparse_tag_is_rejected_on_python311(self):
         path = Path("fixture")
@@ -77,7 +77,7 @@ class PortabilityTests(unittest.TestCase):
             self.assertRegex(name, PERSONAL)
         for name in ("~/.agents/skills", "${CLAUDE_PLUGIN_ROOT}/skills",
                      "$env:USERPROFILE\\.codex", "%USERPROFILE%\\.claude",
-                     "C:/Users/<user>/.codex", "../_shared/expert-model-policy.md"):
+                     "C:/Users/<user>/.codex", "../dev-shared/expert-model-policy.md"):
             self.assertIsNone(PERSONAL.search(name))
         self.assertFalse(any(r["personal_path_references"] for r in audit()))
 

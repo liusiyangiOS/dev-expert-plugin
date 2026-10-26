@@ -11,10 +11,44 @@ import tempfile
 from datetime import datetime, timezone
 
 PACKAGE = Path(__file__).resolve().parent
-ROLES = {"planner", "dev", "qa", "debugger", "researcher",
-         "code-reviewer", "security-auditor", "team-lead"}
-SKILLS = {"expert-team-review", "bugfix-pipeline", "post-coding-pipeline",
-          "quick-fix", "_shared"}
+ROLES = {"dev-planner", "dev-developer", "dev-qa", "dev-debugger", "dev-researcher",
+         "dev-code-reviewer", "dev-security-auditor", "dev-team-lead"}
+SKILLS = {"dev-expert-team-review", "dev-bugfix-pipeline", "dev-post-coding-pipeline",
+          "dev-quick-fix", "dev-shared"}
+VERSION = "3.0.0"
+PACKAGE_NAME = "dev-expert-codex"
+# Exact file inventory of the independently distributed 2.0.1 package.
+# Legacy names are accepted only in that managed manifest, never as payload.
+LEGACY_PATHS = frozenset({
+    ".agents/skills/_shared/expert-evaluation-cases.md",
+    ".agents/skills/_shared/expert-known-failures.md",
+    ".agents/skills/_shared/expert-model-policy.md",
+    ".agents/skills/_shared/expert-platform.md",
+    ".agents/skills/_shared/expert-role-contract.md",
+    ".agents/skills/_shared/expert-workflow-contract.md",
+    ".agents/skills/_shared/expert_models.py",
+    ".agents/skills/_shared/test_expert_models.py",
+    ".agents/skills/bugfix-pipeline/SKILL.md",
+    ".agents/skills/bugfix-pipeline/agents/openai.yaml",
+    ".agents/skills/bugfix-pipeline/references/original-workflow.js",
+    ".agents/skills/expert-team-review/SKILL.md",
+    ".agents/skills/expert-team-review/agents/openai.yaml",
+    ".agents/skills/expert-team-review/references/original-workflow.js",
+    ".agents/skills/post-coding-pipeline/SKILL.md",
+    ".agents/skills/post-coding-pipeline/agents/openai.yaml",
+    ".agents/skills/post-coding-pipeline/references/original-workflow.js",
+    ".agents/skills/quick-fix/SKILL.md",
+    ".agents/skills/quick-fix/agents/openai.yaml",
+    ".agents/skills/quick-fix/references/model-selection.md",
+    ".codex/agents/code-reviewer.toml",
+    ".codex/agents/debugger.toml",
+    ".codex/agents/dev.toml",
+    ".codex/agents/planner.toml",
+    ".codex/agents/qa.toml",
+    ".codex/agents/researcher.toml",
+    ".codex/agents/security-auditor.toml",
+    ".codex/agents/team-lead.toml",
+})
 
 
 def digest(data):
@@ -39,6 +73,22 @@ def safe_relative(name):
               and p.stem in ROLES and p.suffix == ".toml") or
              (len(p.parts) >= 4 and p.parts[:2] == (".agents", "skills")
               and p.parts[2] in SKILLS)))
+
+
+def managed_files(manifest):
+    if not isinstance(manifest, dict):
+        raise ValueError("安装清单必须是 JSON 对象")
+    owned = manifest.get("files")
+    legacy_manifest = (manifest.get("schema_version") == 1
+                       and manifest.get("package") == PACKAGE_NAME
+                       and manifest.get("version") == "2.0.1")
+    if not isinstance(owned, dict) or any(
+            not (safe_relative(name) or (legacy_manifest and name in LEGACY_PATHS))
+            or not isinstance(value, str) or len(value) != 64
+            or any(c not in "0123456789abcdef" for c in value)
+            for name, value in owned.items()):
+        raise ValueError("安装清单损坏或包含越界路径")
+    return owned
 
 
 def check_path(path):
@@ -89,7 +139,7 @@ def payload():
             files[rel] = src.read_bytes()
     if len([x for x in files if x.startswith(".codex/agents/")]) != 8:
         raise ValueError("安装包缺少专家角色")
-    for name in SKILLS - {"_shared"}:
+    for name in SKILLS - {"dev-shared"}:
         if f".agents/skills/{name}/SKILL.md" not in files:
             raise ValueError(f"安装包缺少技能：{name}")
     return files
@@ -105,11 +155,7 @@ def run(args):
     state = home / ".codex/expert-team/install-manifest.json"
     check_path(state)
     old = json.loads(state.read_text(encoding="utf-8")) if state.exists() else {"files": {}}
-    if not isinstance(old, dict):
-        raise ValueError("安装清单必须是 JSON 对象")
-    owned = old.get("files")
-    if not isinstance(owned, dict) or any(not safe_relative(n) for n in owned):
-        raise ValueError("安装清单损坏或包含越界路径")
+    owned = managed_files(old)
     desired = payload() if args.command in ("install", "check") else {}
     if args.command == "check":
         errors = []
@@ -150,6 +196,7 @@ def run(args):
         check_path(backup / "manifest.json")
         for name, (before, _) in changes.items():
             if before is not None:
+                check_path(backup / "files" / name)
                 atomic_write(backup / "files" / name, before)
         atomic_write(backup / "manifest.json", json.dumps({
             "command": args.command, "previous_install_manifest": old,
@@ -166,7 +213,7 @@ def run(args):
             applied.append(name)
         if args.command == "install":
             atomic_write(state, json.dumps({
-                "schema_version": 1, "package": "dev-expert-codex", "version": "2.0.1",
+                "schema_version": 1, "package": PACKAGE_NAME, "version": VERSION,
                 "files": {n: digest(b) for n, b in desired.items()}
             }, ensure_ascii=False, indent=2).encode("utf-8"))
         else:

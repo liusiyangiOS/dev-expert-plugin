@@ -1,4 +1,0 @@
-interface:
-  display_name: 缺陷修复流水线
-  short_description: 用稳定或偶发复现证据定位根因，追踪调用关系并执行有界修复和回归
-  default_prompt: 使用 $bugfix-pipeline 系统化修复这个缺陷，并保留回归测试。

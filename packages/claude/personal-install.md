@@ -1,8 +1,8 @@
 # Claude 专家团个人安装
 
-此目录中的专家团由独立的 Claude 包生成：8 个角色在 `~/.claude/agents`，4 个技能和全部共用规则在 `~/.claude/skills`，平台规则为 `skills/_shared/expert-platform.md`。不读取其他平台目录，不使用链接，不共享模型缓存。
+此目录中的专家团由独立的 Claude 包生成：8 个角色在 `~/.claude/agents`，4 个技能和全部共用规则在 `~/.claude/skills`，平台规则为 `skills/dev-shared/expert-platform.md`。不读取其他平台目录，不使用链接，不共享模型缓存。
 
-新开 Claude Code 会话，使用 `/expert-team-review`、`/bugfix-pipeline`、`/quick-fix`、`/post-coding-pipeline`。不要同时加载本团插件版和个人版。根因、快修准入和升级锁定、独立 QA/review、历史失败复核、累计预算及动态模型策略继续由技能和本端 `_shared` 规定。
+新开 Claude Code 会话，使用 `/dev-expert-team-review`、`/dev-bugfix-pipeline`、`/dev-quick-fix`、`/dev-post-coding-pipeline`。不要同时加载本团插件版和个人版。根因、快修准入和升级锁定、独立 QA/review、历史失败复核、累计预算及动态模型策略继续由技能和本端 `dev-shared` 规定。
 
 源码基准为 dev-expert-plugin 仓库的 `packages/claude`。在仓库根运行 `python3 packages/claude/install.py check` 检查本机差异；更新使用 `install` 后再次 `check`。Windows 将解释器换为 `py -3 -X utf8`，要求 Python 3.11+。只有本端包时可从包目录运行 `python3 install.py`。
 

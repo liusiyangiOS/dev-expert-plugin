@@ -43,17 +43,17 @@ class WindowsLauncherTests(unittest.TestCase):
         self.assertFalse((self.home / ".codex/expert-team/install-manifest.json").exists())
         for command in ("install", "check", "install", "uninstall"):
             self.run_launcher(command, "--home", str(self.home), launcher=launcher)
-        self.assertFalse((self.home / ".codex/agents/dev.toml").exists())
+        self.assertFalse((self.home / ".codex/agents/dev-developer.toml").exists())
 
     def test_installer_error_exit_code_and_replace_are_forwarded(self):
-        target = self.home / ".codex/agents/dev.toml"
+        target = self.home / ".codex/agents/dev-developer.toml"
         target.parent.mkdir(parents=True)
         target.write_text("original", encoding="utf-8")
         self.run_launcher("install", ok=False)
         self.assertEqual(target.read_text(encoding="utf-8"), "original")
         self.run_launcher("install", "--replace")
         self.run_launcher("check")
-        backups = list((self.home / ".codex/expert-team/backups").rglob("dev.toml"))
+        backups = list((self.home / ".codex/expert-team/backups").rglob("dev-developer.toml"))
         self.assertEqual(len(backups), 1)
         self.assertEqual(backups[0].read_text(encoding="utf-8"), "original")
 
@@ -126,7 +126,7 @@ class WindowsLauncherTests(unittest.TestCase):
         self.assertEqual(manifest.read_bytes(), before)
 
     def test_default_flow_preserves_conflicting_files(self):
-        target = self.home / ".codex/agents/dev.toml"
+        target = self.home / ".codex/agents/dev-developer.toml"
         target.parent.mkdir(parents=True)
         target.write_text("custom role", encoding="utf-8")
         result = self.run_launcher(ok=False)

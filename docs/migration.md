@@ -1,4 +1,6 @@
-# 2.0.0 发行整理与能力核对
+# 发行整理与能力核对
+
+当前 3.0.0 命名迁移见 [namespace-migration.md](namespace-migration.md)。下方能力表按当前路径维护；2.0.x 历史来源与安装记录仅用于追溯，不作为新版验证。
 
 来源：2026-10-20 已升级的本地专家团。迁移以明确文件清单进行，不复制个人设置、认证、日志、会话、模型目录或实际运行缓存。`source-manifest.json` 保存逻辑来源路径、来源内容 SHA-256、2.0.0 发行内容哈希及当前打包内容 SHA-256，不包含个人用户名；它用于审阅迁移与后续适配，不是运行时依赖，也不是将来的自动同步源。
 
@@ -11,7 +13,7 @@
 
 每端 8 个角色、4 个 skill。两个目录内的规则文件是各自的普通文件，内容相近也不建立跨端链接。新增安装器、各端 README 和仓库验证工具不计入上述来源文件数。
 
-未迁入 `.agents/skills/_shared/expert-claude-adapter.md`、`expert-claude-model-policy.md`：这是旧的跨端适配遗留，当前独立 Claude 团已使用自己的完整规则。未迁入 `.DS_Store`、个人运行缓存及备份。
+未迁入历史路径 `.agents/skills/_shared/expert-claude-adapter.md`、`expert-claude-model-policy.md`：这是旧的跨端适配遗留，当前独立 Claude 团已使用自己的完整规则。未迁入 `.DS_Store`、个人运行缓存及备份。
 
 仓库根部旧 `agents/`、`workflows/` 和插件清单已由 `packages/claude` 替代；市场 ID 与插件 ID 保留。Codex 既有 `references/original-workflow.js` 保留追溯用途，入口明确禁止直接执行，不注册为活动 workflow。Claude 包无旧 JS workflow。
 
@@ -20,7 +22,7 @@
 1. Claude 源码中的 `~/.claude/skills/`、`~/.claude/agents/` 改为 `${CLAUDE_PLUGIN_ROOT}/skills/`、`${CLAUDE_PLUGIN_ROOT}/agents/`。模型缓存/历史失败状态仍在本端 `~/.claude`。运行说明增加插件命名空间及附属文档路径解析，避免读到个人旧角色。
 2. Codex 快修模型说明删除旧 Claude 分支，保留 Codex 的完整模型策略；快修升级段明确继续本端策略。该删除不减少 Claude 能力，Claude 包自带独立且更完整的策略。
 3. Codex 执行约定显式增加已有快修规则的路由入口，使各工作流在读取共用约定时能发现快修；准入、必要关卡和升级锁定不变。
-4. Codex 模型策略/脚本注释中“三个入口”更新为四个，纳入 quick-fix；解析算法与默认模型分工不变。
+4. Codex 模型策略/脚本注释中“三个入口”更新为四个，纳入 dev-quick-fix；解析算法与默认模型分工不变。
 5. 其他来源正文按上述路径归一后保持一致。本机来源文件未修改。
 
 没有实施此前取消的“以减少验证环节换速度”的优化。这里做的是发行适配与现有能力完整迁入。
@@ -31,16 +33,16 @@
 
 | 能力 | 两端规则位置 | 关键不变量 |
 | --- | --- | --- |
-| 按复杂度选节点、任务图 | `expert-team-review/SKILL.md`、`_shared/expert-workflow-contract.md` | 单一调度者；无依赖/写入/环境冲突才并行；成员不递归建团队 |
-| 图谱影响分析 | `_shared/expert-role-contract.md` | 检查覆盖/新鲜度，关键边回查源码，动态调用补证；无工具可回退 |
-| 根因修复与偶发诊断 | `bugfix-pipeline/SKILL.md` | 无因果证据不猜改；保留稳定/偶发/不可复现分流 |
-| 主动和自动快修 | `quick-fix/SKILL.md`；Claude `_shared/expert-team-runtime.md`，Codex `_shared/expert-workflow-contract.md` | 全条件准入，不能按改动行数判断；失败/复杂/不确定升级锁定 |
-| 完整 bugfix 内使用快修 | `quick-fix/SKILL.md` | 已失败/已复杂/已锁定不能降级；原必要节点与预算保留 |
+| 按复杂度选节点、任务图 | `dev-expert-team-review/SKILL.md`、`dev-shared/expert-workflow-contract.md` | 单一调度者；无依赖/写入/环境冲突才并行；成员不递归建团队 |
+| 图谱影响分析 | `dev-shared/expert-role-contract.md` | 检查覆盖/新鲜度，关键边回查源码，动态调用补证；无工具可回退 |
+| 根因修复与偶发诊断 | `dev-bugfix-pipeline/SKILL.md` | 无因果证据不猜改；保留稳定/偶发/不可复现分流 |
+| 主动和自动快修 | `dev-quick-fix/SKILL.md`；Claude `dev-shared/expert-team-runtime.md`，Codex `dev-shared/expert-workflow-contract.md` | 全条件准入，不能按改动行数判断；失败/复杂/不确定升级锁定 |
+| 完整 bugfix 内使用快修 | `dev-quick-fix/SKILL.md` | 已失败/已复杂/已锁定不能降级；原必要节点与预算保留 |
 | QA 与独立审查 | 各入口及角色正文 | 行为快修 red→green、独立 QA/review；快照改变则相关证据失效 |
-| 历史失败诊断复用 | `_shared/expert-known-failures.md` | 精确匹配、关联变化失效、30 天复核、恢复后复发重查；不跳测试 |
-| 有界回修与恢复 | `_shared/expert-workflow-contract.md`、各入口 | 同一问题累计计数，换人/换入口/恢复不清零 |
-| 编码后只读质量门 | `post-coding-pipeline/SKILL.md` | 没有修复授权不改代码；存在已知失败不称全绿 |
-| 模型选择与刷新 | `_shared/expert-model-policy.md` | 用户覆盖优先、72 小时核验、真实调用参数、不静默降档 |
+| 历史失败诊断复用 | `dev-shared/expert-known-failures.md` | 精确匹配、关联变化失效、30 天复核、恢复后复发重查；不跳测试 |
+| 有界回修与恢复 | `dev-shared/expert-workflow-contract.md`、各入口 | 同一问题累计计数，换人/换入口/恢复不清零 |
+| 编码后只读质量门 | `dev-post-coding-pipeline/SKILL.md` | 没有修复授权不改代码；存在已知失败不称全绿 |
+| 模型选择与刷新 | `dev-shared/expert-model-policy.md` | 用户覆盖优先、72 小时核验、真实调用参数、不静默降档 |
 | 模型平台差异 | Codex `expert_models.py`；Claude 模型策略 | Codex 目录解析 Sol/Terra；Claude 别名/提供方核验，按模式独立时间与指纹 |
 | 授权与隔离 | 各入口和角色约定 | 不额外授予提交/推送/部署；外部资料不是指令或授权 |
 
@@ -53,7 +55,7 @@
 | 主动快修但无可靠根因/验证 | 拒绝准入，完整诊断；不先试改 |
 | 局部行为快修修复后原问题仍在 | 首次失败立即升级，计数保留、同问题禁止回切 |
 | 完整 bugfix 已失败一次，后来补丁看似很小 | 保持完整流程，不能降级 |
-| 完整 bugfix 尚无失败、风险明确、局部准入成立 | 可以简化该实现节点；原 QA/debugger/review 保留 |
+| 完整 bugfix 尚无失败、风险明确、局部准入成立 | 可以简化该实现节点；原 QA/dev-debugger/review 保留 |
 | post-coding 只读发现简单失败 | 报告缺陷，不自动改代码 |
 | 相同旧失败、匹配有效且与本次无关 | 必要测试照跑，复用诊断，明确 `delta_pass` 与非零退出 |
 | 失败文本相同但依赖/环境变化，或恢复后复发 | 重新调查，不放入永久免检名单 |
@@ -86,7 +88,7 @@
 - Codex：28 个受管普通文件逐字节等于 `packages/codex` 的角色/技能内容。
 - Claude：新增自包含 `packages/claude/install.py`，将同包插件路径/命名空间转换为个人形式；19 个角色/技能/规则文件加 1 份个人安装说明，全部在 `.claude`。插件分发仍保留原生插件形式。路径转换之外的路由、模型和质量规则保持。
 - 个人安装器支持预览、检查、备份更新、冲突阻断和回滚。安装前保留原文件备份；现用两端不建立链接，不共享缓存或读取另一端源码。
-- 两份已无活动引用的早期 Claude 共享适配文档从 Codex `_shared` 移至备份，不继续混入安装目录。
+- 两份已无活动引用的早期 Claude 共享适配文档从当时 Codex `_shared` 移至备份，不继续混入安装目录。
 - 源码基准为本仓库；本机改动先由 `check` 暴露并审阅，不能整目录反向覆盖包。`source-manifest.json` 的 `source_sha256` 是最初迁移来源的历史快照；持续安装一致性以各端安装器清单与当前包校验为准。
 
 未提交、推送或发布；上述同步仅针对本地 checkout 与当前个人安装。

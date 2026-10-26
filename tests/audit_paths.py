@@ -6,9 +6,9 @@ from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ("expert-team-review", "bugfix-pipeline", "post-coding-pipeline", "quick-fix", "_shared")
-ROLES = ("planner", "dev", "qa", "debugger", "researcher",
-         "code-reviewer", "security-auditor", "team-lead")
+SKILLS = ("dev-expert-team-review", "dev-bugfix-pipeline", "dev-post-coding-pipeline", "dev-quick-fix", "dev-shared")
+ROLES = ("dev-planner", "dev-developer", "dev-qa", "dev-debugger", "dev-researcher",
+         "dev-code-reviewer", "dev-security-auditor", "dev-team-lead")
 # A literal OS user directory is not portable. ~, environment variables,
 # plugin root tokens and project-relative resources are intentionally allowed.
 PERSONAL = re.compile(
