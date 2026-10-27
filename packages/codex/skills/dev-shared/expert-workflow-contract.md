@@ -54,3 +54,9 @@ QA 使用 `pass / pass_with_known / dev-developer / self / environment / inconcl
 用户主动调用 dev-quick-fix，或开发/bugfix 中出现有证据的局部低风险修复时，唯一主理人读取 `~/.agents/skills/dev-quick-fix/SKILL.md` 完成准入。新功能不伪装成快修；post-coding 只读检查不因简单失败获得修复授权。
 
 完整 bugfix 只有尚无修复失败、未确认复杂/高风险、未被锁定且全部准入成立，才能简化局部实现；原 QA 复现、dev-debugger 根因门、最终 QA 和必要审查保留。准入拒绝、快修首次失败、复杂或不确定即升级完整 bugfix，同一问题禁止回切；跨入口沿用生产尝试、QA 自修、审查回修累计预算与有效模型选择。自动路由依赖当前宿主可见的技能和主理人判断，不是后台 hook。
+
+## 按需性能与产品 UI 交接
+
+涉及性能目标、退化线索或改善主张时，读取 [性能协议](expert-performance.md)，按需用 [轻量记录](expert-performance-record.md) 绑定基线、原始样本与结论；不默认每次全量压测。普通功能验收不因本协议增加无关实验。
+
+收到既有产品设计/审查记录时，读取 [UI 实现验证与回执](expert-ui-verification.md)，按页面/状态/视口/版本验证并回传事实，不重新裁决产品价值或自动创建产品流程。

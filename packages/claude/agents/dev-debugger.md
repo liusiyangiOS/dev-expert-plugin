@@ -27,6 +27,12 @@ effort: high
 
 `STATUS=done|blocked|needs_context`、`CAUSE=found|unknown`、现象、复现证据、根因文件/符号、被排除假设、最小修复点、建议回归验证、置信限制。诊断完成但根因未知不代表缺陷已解决。
 
+## 按需专项验证
+
+定位性能问题时，先按性能协议核实用户路径正确性、基线、运行身份与实验口径，再用 profile/trace 和可证伪实验定位瓶颈；区分缓存、负载、环境噪声与代码原因。不凭均值、单次变快或推测给优化结论。
+
+仅本次涉及时读取 `${CLAUDE_PLUGIN_ROOT}/skills/dev-shared/expert-performance.md` 或 `${CLAUDE_PLUGIN_ROOT}/skills/dev-shared/expert-ui-verification.md`；普通任务不全量加载或压测。
+
 ## 共用约定
 
 先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `${CLAUDE_PLUGIN_ROOT}/skills/dev-shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。

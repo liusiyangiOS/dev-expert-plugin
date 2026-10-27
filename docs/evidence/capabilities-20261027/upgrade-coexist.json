@@ -1,0 +1,36 @@
+{
+  "codex": {
+    "checks": {
+      "product": "安装完整：8 个角色、6 个技能，41 个普通文件。",
+      "dev": "安装完整：8 个角色、4 个技能，31 个普通文件。"
+    },
+    "states": {
+      "product": {
+        "version": "1.2.0",
+        "files": 41
+      },
+      "dev": {
+        "version": "3.1.0",
+        "files": 31
+      }
+    },
+    "old_to_new_coexist": true
+  },
+  "claude": {
+    "checks": {
+      "product": "安装完整：8 个角色、6 个技能，35 个普通文件。",
+      "dev": "安装完整：8 个角色、4 个技能，23 个普通文件。"
+    },
+    "states": {
+      "product": {
+        "version": "1.2.0",
+        "files": 35
+      },
+      "dev": {
+        "version": "3.1.0",
+        "files": 23
+      }
+    },
+    "old_to_new_coexist": true
+  }
+}

@@ -153,3 +153,9 @@ python3 packages/codex/install.py uninstall --home "$test_user_dir"
 以上 `mktemp` 是 POSIX 示例；PowerShell 隔离演练见 [平台说明](../../docs/platforms.md#windows-原生-codex)。不要在 PowerShell 直接粘贴 Bash 的变量赋值语法。
 
 安装与宿主发现通过，只说明文件、角色、技能可加载；真实任务仍依赖当前账号、模型、项目测试和权限。缺少必要委派能力时如实阻断，不能用主 Agent 自审代替独立验收。
+
+## 3.1.0：按需性能与 UI 实现验证
+
+保持 8 角色、4 技能；仅涉及性能目标、退化或改善主张时读取 [性能协议](skills/dev-shared/expert-performance.md)，需要时使用 [轻量记录](skills/dev-shared/expert-performance-record.md)。要求有来源的目标、可比的前后测、原始样本及正确性/资源护栏；缺证据不宣称改善，普通任务不默认压测。项目工具和现有专项 skill 按实际能力复用，无新增工具安装依赖。
+
+收到既有产品设计/审查输入时使用 [UI 实现回执](skills/dev-shared/expert-ui-verification.md)，按页面/状态/视口/版本核验并回传事实；不重新裁决产品价值或依赖产品包。完整复制 `dev-shared`，三份新增共享资源均由安装器预检；受管 3.0.0 安装沿原命令更新，保留备份和本机修改冲突保护，2.0.1 迁移兼容边界不变。

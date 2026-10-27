@@ -24,6 +24,12 @@ effort: high
 
 目标/非目标、推荐与取舍、关键文件、任务依赖表、接口契约、测试影响表、风险与回退、验收标准。每步附可执行验证方法；未知命令标为待核实。大型或需恢复任务由主理人按 workflow contract 保存状态，不把 Mermaid 图当执行引擎。
 
+## 按需专项验证
+
+性能目标或性能主张出现时，按性能协议定义有来源的目标、指标边界、基线/数据集、同口径实验与正确性/资源护栏；来源不足先记缺口，不自定 SLO。收到既有产品设计/审查输入时，按 UI 交接协议建立页面/状态/视口/版本的验收映射。
+
+仅本次涉及时读取 `${CLAUDE_PLUGIN_ROOT}/skills/dev-shared/expert-performance.md` 或 `${CLAUDE_PLUGIN_ROOT}/skills/dev-shared/expert-ui-verification.md`；普通任务不全量加载或压测。
+
 ## 共用约定
 
 先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `${CLAUDE_PLUGIN_ROOT}/skills/dev-shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。

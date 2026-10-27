@@ -1,0 +1,5 @@
+2.1.201 (Claude Code)
+PASS Claude：真实市场安装、4 技能/8 角色发现、文件一致、更新与卸载
+codex-cli 0.164.0-alpha.11.1
+PASS Codex：真实宿主上下文发现 4 个技能
+PASS Codex：原生委派工具包含全部 8 个角色（本地请求捕获，无模型推理）

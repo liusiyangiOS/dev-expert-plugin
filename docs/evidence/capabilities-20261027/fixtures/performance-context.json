@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "path": "R-1 save-and-list",
+  "goal": "在不损害业务成功率和尾延迟前提下降低保存完成耗时",
+  "baseline": {
+    "build": "b1",
+    "machine": "M1",
+    "concurrency": 1,
+    "cache": "warm",
+    "dataset": "records-v1",
+    "samples": 100
+  },
+  "candidate": {
+    "build": "c1",
+    "machine": "M1",
+    "concurrency": 1,
+    "cache": "warm",
+    "dataset": "records-v1",
+    "samples": 100
+  },
+  "note": "两组是同一负载下的单轮合成样本，不是实际压测；用户未给尾延迟数值SLO。"
+}

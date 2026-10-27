@@ -1,6 +1,6 @@
 # 发行整理与能力核对
 
-当前 3.0.0 命名迁移见 [namespace-migration.md](namespace-migration.md)。下方能力表按当前路径维护；2.0.x 历史来源与安装记录仅用于追溯，不作为新版验证。
+3.0.0 命名迁移见 [namespace-migration.md](namespace-migration.md)。下方能力表按当前路径维护；2.0.x 历史来源与安装记录仅用于追溯，不作为新版验证。
 
 来源：2026-10-20 已升级的本地专家团。迁移以明确文件清单进行，不复制个人设置、认证、日志、会话、模型目录或实际运行缓存。`source-manifest.json` 保存逻辑来源路径、来源内容 SHA-256、2.0.0 发行内容哈希及当前打包内容 SHA-256，不包含个人用户名；它用于审阅迁移与后续适配，不是运行时依赖，也不是将来的自动同步源。
 
@@ -34,6 +34,8 @@
 | 能力 | 两端规则位置 | 关键不变量 |
 | --- | --- | --- |
 | 按复杂度选节点、任务图 | `dev-expert-team-review/SKILL.md`、`dev-shared/expert-workflow-contract.md` | 单一调度者；无依赖/写入/环境冲突才并行；成员不递归建团队 |
+| 按需性能证据 | `dev-shared/expert-performance.md`、`expert-performance-record.md` | 有来源目标、可比基线/运行身份、原始样本、正确性/资源护栏；缺证据不宣称改善 |
+| 既有产品 UI 交接 | `dev-shared/expert-ui-verification.md` | 按页面/状态/视口/版本还原事实回执，不重做产品价值裁决或依赖产品包 |
 | 图谱影响分析 | `dev-shared/expert-role-contract.md` | 检查覆盖/新鲜度，关键边回查源码，动态调用补证；无工具可回退 |
 | 根因修复与偶发诊断 | `dev-bugfix-pipeline/SKILL.md` | 无因果证据不猜改；保留稳定/偶发/不可复现分流 |
 | 主动和自动快修 | `dev-quick-fix/SKILL.md`；Claude `dev-shared/expert-team-runtime.md`，Codex `dev-shared/expert-workflow-contract.md` | 全条件准入，不能按改动行数判断；失败/复杂/不确定升级锁定 |
@@ -92,3 +94,9 @@
 - 源码基准为本仓库；本机改动先由 `check` 暴露并审阅，不能整目录反向覆盖包。`source-manifest.json` 的 `source_sha256` 是最初迁移来源的历史快照；持续安装一致性以各端安装器清单与当前包校验为准。
 
 未提交、推送或发布；上述同步仅针对本地 checkout 与当前个人安装。
+
+## 3.1.0：性能方法与 UI 交接
+
+本版本在两端分别增加性能协议、轻量记录模板和已有产品 UI 的实现验证回执，使用原有角色和四入口按需读取。角色职责、快修准入与升级、只读检查、模型策略及预算保持。三份新资源为本仓库新编写，不伪造早期本机来源哈希；`source-manifest.json` 继续只跟踪原来源清单，刷新其当前打包哈希和版本，保留历史来源及 2.0.0 哈希。上述迁入文件数和历史验证描述仍表示各自当时快照。
+
+性能方法参考 [agency-agents performance-benchmarker 固定源码](https://github.com/msitarzewski/agency-agents/blob/b37b5bb33b78f2c1d6567d98e25ca818e3259219/testing/testing-performance-benchmarker.md) 的基线/测量/优化思路，按本团授权、正确性、样本限制和独立验证边界重新表述；未安装或执行该角色，不沿用示例延迟、流量或统计承诺。实际能力验证见维护任务对应的记录，包装测试不能代替模型行为或业务性能验收。

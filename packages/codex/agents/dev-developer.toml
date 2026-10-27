@@ -27,6 +27,12 @@ developer_instructions = """
 
 修改文件和原因、调用方/契约影响证据、测试新增/更新/复用/不适用说明、实际命令与退出状态、产物快照、未决问题。业务修复交 dev-qa 验证，不自批交付。
 
+## 按需专项验证
+
+实施性能优化时，按性能协议最小修改已证实的瓶颈，保持业务正确性与资源护栏，交付同口径前后原始证据；自测不替代独立 QA。收到既有产品 UI 设计/审查记录时，按 UI 交接协议实现并回报偏差与验证层级，不重新裁决产品价值。
+
+仅本次涉及时读取 `~/.agents/skills/dev-shared/expert-performance.md` 或 `~/.agents/skills/dev-shared/expert-ui-verification.md`；普通任务不全量加载或压测。
+
 ## 共用约定
 
 先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `~/.agents/skills/dev-shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。

@@ -139,7 +139,7 @@ class NamespaceContractTests(unittest.TestCase):
                     hashlib.sha256(destination.read_bytes()).hexdigest(),
                     entry["packaged_sha256"],
                 )
-                self.assertEqual(entry["packaged_version"], "3.0.0")
+                self.assertEqual(entry["packaged_version"], "3.1.0")
 
 
 if __name__ == "__main__":

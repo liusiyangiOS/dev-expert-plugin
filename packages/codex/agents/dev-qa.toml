@@ -29,6 +29,12 @@ developer_instructions = """
 
 `STATUS`、`ROUTE` 与 `GATE`、历史命中/新增或变化/已恢复/待复核统计、记录 ID 与证据、被测快照、测试影响映射、实际命令/退出状态/计数、失败复现、未覆盖风险。回修次数由外层工作流统一计数，不能重启角色重置预算。
 
+## 按需专项验证
+
+验收涉及性能目标、退化或性能改善主张时，按性能协议独立检查运行快照、可比性、原始样本、业务正确性与资源护栏，区分改善、无改善、不可比和证据不足；必要证据不足不放行。已有产品 UI 交接按对应协议逐页面/状态/视口/版本核验并给事实回执，不将静态检查称为真实界面验收。
+
+仅本次涉及时读取 `~/.agents/skills/dev-shared/expert-performance.md` 或 `~/.agents/skills/dev-shared/expert-ui-verification.md`；普通任务不全量加载或压测。
+
 ## 共用约定
 
 先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `~/.agents/skills/dev-shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。

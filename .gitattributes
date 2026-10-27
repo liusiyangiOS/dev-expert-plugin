@@ -1,2 +1,4 @@
 * text=auto eol=lf
 *.cmd text eol=crlf
+# Preserve the exact bytes hashed in the archived synthetic QA evidence.
+docs/evidence/capabilities-20261027/fixtures/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,7 +1,7 @@
 {
   "name": "dev-expert-plugin",
-  "description": "开发专家团：8 个专家、4 个技能，含根因诊断、条件快修、graph、历史失败复用与动态模型策略。",
-  "version": "3.0.0",
+  "description": "开发专家团：8 个专家、4 个技能，含根因诊断、条件快修、graph、按需性能验证、UI 交接、历史失败复用与动态模型策略。",
+  "version": "3.1.0",
   "author": {
     "name": "liusiyang",
     "url": "https://github.com/liusiyangiOS"

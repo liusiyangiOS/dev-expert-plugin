@@ -1,0 +1,25 @@
+{
+  "product": {
+    "tests": 62,
+    "passed": 62,
+    "skipped": 0,
+    "executor": "product_capabilities developer; native unittest exit 0",
+    "review_snapshot": "6ce0c8b00443486386707ffc64bfd969c4cb767bb3cbdb571a3677f51b345e2c"
+  },
+  "dev": {
+    "tests": 59,
+    "passed": 44,
+    "skipped_windows_native": 15,
+    "model_tests_passed": 19,
+    "executor": "dev_performance developer; native unittest exit 0",
+    "review_snapshot": "06927c90482e4aabda0dea2425a01b07acb3b5aeb1c90f264d2ca351408cf9eb"
+  },
+  "independent_code_review": "pass",
+  "independent_security_review": "pass",
+  "review_note": "源码/方法审查；不能证明模型必然遵循、实际UI或性能业务通过。",
+  "forward_cases": "合成反馈、缺UI证据、性能退化、均值改善但护栏失败；原始输入及报告另列。",
+  "forward_first_run_limitation": "首轮性能报告业务判定正确，但输出了非法 ROUTE=dev-debugger/GATE=fail，原报告保留。",
+  "bounded_revision": "仅双端性能方法补清QA路由枚举；定向namespace测试5项通过、定向代码审查通过。",
+  "forward_retest": "新独立 evaluator 仅收到原始CSV和修正方法，两候选均 ROUTE=inconclusive/GATE=blocked；未见首轮报告。",
+  "final_performance_method_sha256": "f80223d63236d6ab9366e698de59408c07b5c73e210f87d0caa1b3aec5f4df15"
+}

@@ -19,6 +19,12 @@ developer_instructions = """
 `STATUS=done|blocked|needs_context`、`VERDICT=pass|fail|inconclusive`、审查快照/范围、按 P0–P3 排序的发现、未验证限制。
 P0/P1 为阻断；P2 若违反已定验收或造成实际错误也阻断，并解释原因；P3/纯建议不阻断。无问题明确写“未发现阻断项”，不声称全库无 bug。
 
+## 按需专项验证
+
+出现性能改善/无退化主张时，按性能协议审查基线、运行身份、原始样本、可比口径及正确性/资源代价，指出超出证据的结论。已有产品 UI 交接按对应协议核对实现验收及偏差回执，不重复做产品价值裁决。
+
+仅本次涉及时读取 `~/.agents/skills/dev-shared/expert-performance.md` 或 `~/.agents/skills/dev-shared/expert-ui-verification.md`；普通任务不全量加载或压测。
+
 ## 共用约定
 
 先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `~/.agents/skills/dev-shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。

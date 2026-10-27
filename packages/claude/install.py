@@ -15,7 +15,8 @@ ROLES = {"dev-planner", "dev-developer", "dev-qa", "dev-debugger", "dev-research
          "dev-code-reviewer", "dev-security-auditor", "dev-team-lead"}
 SKILLS = {"dev-expert-team-review", "dev-bugfix-pipeline", "dev-post-coding-pipeline",
           "dev-quick-fix", "dev-shared"}
-VERSION = "3.0.0"
+VERSION = "3.1.0"
+REQUIRED_SHARED = ('expert-performance.md', 'expert-performance-record.md', 'expert-ui-verification.md')
 PACKAGE_NAME = "dev-expert-claude-personal"
 # Exact file inventory of the independently distributed 2.0.1 package.
 # Legacy names are accepted only in that managed manifest, never as payload.
@@ -160,6 +161,9 @@ def payload():
     for name in SKILLS - {"dev-shared"}:
         if f".claude/skills/{name}/SKILL.md" not in files:
             raise ValueError(f"安装包缺少技能：{name}")
+    for name in REQUIRED_SHARED:
+        if f".claude/skills/dev-shared/{name}" not in files:
+            raise ValueError(f"安装包缺少共享资源：{name}")
     return files
 
 

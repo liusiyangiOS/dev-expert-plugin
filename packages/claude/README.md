@@ -118,3 +118,9 @@ claude plugin validate packages/claude
 更新前执行 `check` 检查本机与包的差异，审阅后再 `install`、`check`。未登记同名文件或被改动的文件默认拒绝覆盖；`install --replace` 会备份后接管。卸载用 `uninstall`，不会清除缓存/状态或无关配置。清单在 `~/.claude/expert-team/install-manifest.json`，备份在相邻 `backups` 目录。
 
 手动安装先用 `install --home <空暂存目录>` 生成个人形式，再复制其中 `.claude/agents` 和 `.claude/skills` 的本团普通文件；后续用安装器接管才能做受管校验。不要将个人形式直接覆盖回插件源码；在本端包维护，安装器负责路径转换。具体见[根 README 的维护说明](../../README.md#手动复制与本机同步)。
+
+## 3.1.0：按需性能与 UI 实现验证
+
+保持 8 角色、4 技能；仅涉及性能目标、退化或改善主张时读取 [性能协议](skills/dev-shared/expert-performance.md)，需要时使用 [轻量记录](skills/dev-shared/expert-performance-record.md)。要求有来源的目标、可比的前后测、原始样本及正确性/资源护栏；缺证据不宣称改善，普通任务不默认压测。项目工具和现有专项 skill 按实际能力复用，无新增工具安装依赖。
+
+收到既有产品设计/审查输入时使用 [UI 实现回执](skills/dev-shared/expert-ui-verification.md)，按页面/状态/视口/版本核验并回传事实；不重新裁决产品价值或依赖产品包。完整复制 `dev-shared`，三份新增共享资源均由安装器预检；受管 3.0.0 安装沿原命令更新，保留备份和本机修改冲突保护，2.0.1 迁移兼容边界不变。

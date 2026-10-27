@@ -9,6 +9,10 @@ description: 按复杂度和任务依赖图组织专业子 Agent 完成需求交
 
 先读取 [平台与路径约定](../dev-shared/expert-platform.md)，按实际 Agent 环境解析路径、解释器与 shell；质量规则保持不变。
 
+## 按需专项验收
+
+涉及性能目标、退化或改善主张时读取 [性能协议](../dev-shared/expert-performance.md)，需要记录时用 [轻量记录](../dev-shared/expert-performance-record.md)。按现有角色完成目标定义→瓶颈定位→最小优化→独立 QA/review，是否执行取决于本入口权限和任务，不默认全量压测；缺目标来源先记缺口。已有产品设计/审查输入按 [UI 实现验证与回执](../dev-shared/expert-ui-verification.md) 绑定页面/状态/视口/版本，不重新做产品价值裁决。
+
 ## 启动
 
 完整读取 [执行约定](../dev-shared/expert-workflow-contract.md)、[角色与 graph 约定](../dev-shared/expert-role-contract.md)；创建专家前完整读取并执行 [模型策略](../dev-shared/expert-model-policy.md)，保留默认/疯狂模式、72 小时刷新与用户覆盖，并实际传入创建参数。

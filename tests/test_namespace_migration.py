@@ -1,4 +1,4 @@
-"""真实 2.0.1 个人安装到 3.0.0 命名空间的独立迁移回归。"""
+"""真实 2.0.1 个人安装到当前 dev 命名空间的独立迁移回归。"""
 import contextlib
 import importlib.util
 import io
@@ -79,7 +79,7 @@ class NamespaceMigrationTests(unittest.TestCase):
                 self.run_installer(installer, home)
                 desired = installer.payload()
                 state = json.loads(self.state(home, host).read_text(encoding='utf-8'))
-                self.assertEqual(state['version'], '3.0.0')
+                self.assertEqual(state['version'], installer.VERSION)
                 self.assertEqual(state['files'], {n: installer.digest(b) for n, b in desired.items()})
                 self.assertTrue(all(installer.safe_relative(n) for n in state['files']))
                 for name in set(files) - set(desired):

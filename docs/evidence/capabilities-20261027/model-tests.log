@@ -1,0 +1,24 @@
+test_72_hour_boundary_and_future_clock (test_expert_models.ModelPolicyTests.test_72_hour_boundary_and_future_clock) ... ok
+test_camel_case_model_list_format (test_expert_models.ModelPolicyTests.test_camel_case_model_list_format) ... ok
+test_cli_unicode_paths_and_output_are_utf8 (test_expert_models.ModelPolicyTests.test_cli_unicode_paths_and_output_are_utf8) ... ok
+test_crazy_mode_uses_flagship_but_keeps_terra (test_expert_models.ModelPolicyTests.test_crazy_mode_uses_flagship_but_keeps_terra) ... ok
+test_default_mode_preserves_role_split (test_expert_models.ModelPolicyTests.test_default_mode_preserves_role_split) ... ok
+test_explicit_pair_overrides_every_role_without_mode_cache (test_expert_models.ModelPolicyTests.test_explicit_pair_overrides_every_role_without_mode_cache) ... ok
+test_failed_cli_refresh_does_not_overwrite_existing_cache (test_expert_models.ModelPolicyTests.test_failed_cli_refresh_does_not_overwrite_existing_cache) ... ok
+test_future_flagship_name_is_supported (test_expert_models.ModelPolicyTests.test_future_flagship_name_is_supported) ... ok
+test_hidden_latest_model_is_not_selected (test_expert_models.ModelPolicyTests.test_hidden_latest_model_is_not_selected) ... ok
+test_missing_terra_is_not_silently_substituted (test_expert_models.ModelPolicyTests.test_missing_terra_is_not_silently_substituted) ... ok
+test_only_effort_override_preserves_mode_models (test_expert_models.ModelPolicyTests.test_only_effort_override_preserves_mode_models) ... ok
+test_only_model_override_preserves_role_effort (test_expert_models.ModelPolicyTests.test_only_model_override_preserves_role_effort) ... ok
+test_original_catalog_age_cannot_be_reset_by_new_check_time (test_expert_models.ModelPolicyTests.test_original_catalog_age_cannot_be_reset_by_new_check_time) ... ok
+test_partial_override_rejects_unsupported_role_effort (test_expert_models.ModelPolicyTests.test_partial_override_rejects_unsupported_role_effort) ... ok
+test_refresh_rejects_stale_catalog_or_nonofficial_source (test_expert_models.ModelPolicyTests.test_refresh_rejects_stale_catalog_or_nonofficial_source) ... ok
+test_removed_model_is_rejected_by_current_catalog (test_expert_models.ModelPolicyTests.test_removed_model_is_rejected_by_current_catalog) ... ok
+test_stale_cache_blocks_mode_but_not_verified_explicit_pair (test_expert_models.ModelPolicyTests.test_stale_cache_blocks_mode_but_not_verified_explicit_pair) ... ok
+test_unknown_or_unsupported_explicit_choice_is_not_changed (test_expert_models.ModelPolicyTests.test_unknown_or_unsupported_explicit_choice_is_not_changed) ... ok
+test_version_order_is_numeric_and_selects_new_terra (test_expert_models.ModelPolicyTests.test_version_order_is_numeric_and_selects_new_terra) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.113s
+
+OK

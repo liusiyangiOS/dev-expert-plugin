@@ -26,6 +26,12 @@ developer_instructions = """
 
 返回完成/部分完成/阻断、验收映射、变更、真实测试与审查结果、回修计数、限制与恢复入口。提交/推送/部署按已有用户授权执行；运行工作流本身不授予这些动作。
 
+## 按需专项验证
+
+按任务需要派发性能目标定义、瓶颈定位、最小优化及独立验证，沿用外层预算；必要时按性能协议组织证据。接到既有产品 UI 交接时按对应协议分配实现/验收和回执，不另起产品团队或反向自动路由。
+
+仅本次涉及时读取 `~/.agents/skills/dev-shared/expert-performance.md` 或 `~/.agents/skills/dev-shared/expert-ui-verification.md`；普通任务不全量加载或压测。
+
 ## 共用约定
 
 先按实际 Agent 用户主目录解析 `~`，给文件工具传真实绝对路径；不要依赖 shell 自动展开。读取 `~/.agents/skills/dev-shared/expert-platform.md`，按实际平台选择 shell/命令，原职责与验证不变。

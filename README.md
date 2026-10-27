@@ -1,5 +1,6 @@
 # 开发专家团 · Claude Code 与 Codex
 
+本版安装、验证证据与覆盖边界见 [3.1.0 能力升级验收](docs/capabilities-validation.md)。
 把需求开发、根因诊断、条件式快速修复和提交前检查组织成可验证的专家协作流程。每端包含 **8 个专家角色、4 个 skill**；按任务复杂度选节点，准确性优先，必要验证不因快修而省略。
 
 **同仓库、独立发行。** `packages/claude` 与 `packages/codex` 各自包含完整角色、规则和模型策略；运行时互不读取，不使用软链接或硬链接，不共享模型缓存。安装一端不要求安装另一端。
@@ -15,7 +16,7 @@
 
 ### Claude Code
 
-本地准备版本为 3.0.0（名称不兼容升级，见 [命名迁移](docs/namespace-migration.md)）；发布到 GitHub 后，在 Claude Code 中执行：
+本地准备版本为 3.1.0（3.0.0 的名称迁移说明见 [命名迁移](docs/namespace-migration.md)）；发布到 GitHub 后，在 Claude Code 中执行：
 
 ```text
 /plugin marketplace add liusiyangiOS/dev-expert-plugin
@@ -142,6 +143,14 @@ python3 packages/claude/install.py check
 | `dev-qa` | 按需求独立验收、影响矩阵和失败归属；仅获分配时改测试 |
 | `dev-code-reviewer` | 审符合性、正确性与质量，只读审查 |
 | `dev-security-auditor` | 按实际风险检查信任边界、敏感数据、执行与依赖安全 |
+
+### 按需性能验证与既有产品 UI 交接
+
+3.1.0 保持 8 个角色、4 个技能。性能目标、退化线索或改善主张出现时，现有角色按需读取本端 `dev-shared/expert-performance.md`：planner 定义有来源的可测验收，debugger 用实验定位瓶颈，developer 最小优化，QA 独立检查同口径前后测、业务正确性与资源护栏，reviewer 核验主张。没有目标来源先记缺口；没有基线不能宣称改善。冷启动/预热、缓存、并发、样本量、原始记录和实际运行身份都会影响结论，不能从均值推 p95，不能只凭 HTTP 200 判断业务成功。
+
+[Codex 性能协议](packages/codex/skills/dev-shared/expert-performance.md) / [Claude 性能协议](packages/claude/skills/dev-shared/expert-performance.md) 与各端轻量记录模板一并安装。普通任务不默认压测；可复用项目已有 benchmark/profile 工具或实际可用的专项 skill，不绑定 gstack、不安装通用压测引擎或 agency 包。快修继续准入与升级，post-coding 继续只读，不自动优化或向生产/外部网络施加未授权负载。协议与包装测试通过只证明相应规则/分发，不证明真实项目已有性能改善。
+
+收到已有产品设计或审查记录时，开发按页面、状态、视口和版本验证实现，回传需求/页面/路径 ID、输入快照、预期/实际、证据、环境、结论/未测及 owner/复验。详见 [Codex UI 回执](packages/codex/skills/dev-shared/expert-ui-verification.md) / [Claude UI 回执](packages/claude/skills/dev-shared/expert-ui-verification.md)。此能力接收已有交接，不重复裁决产品价值，也不依赖产品包或自动创建反向产品流程。
 
 ### 保留的质量规则
 

@@ -34,7 +34,7 @@ class ClaudePersonalTests(unittest.TestCase):
 
     def test_render_changes_only_layout_and_preserves_contracts(self):
         files = installer.payload()
-        self.assertEqual(len(files), 20)
+        self.assertEqual(len(files), 23)
         for rel, data in files.items():
             self.assertNotIn(b'CLAUDE_PLUGIN_ROOT', data, rel)
             self.assertNotIn(b'dev-expert-plugin:', data, rel)
